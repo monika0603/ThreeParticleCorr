@@ -42,6 +42,7 @@
 #include <TGraph.h>
 #include "TVector3.h"
 #include "assert.h"
+#include <stdlib.h>
 
 using namespace std;
 using namespace edm;
@@ -78,6 +79,7 @@ private:
     int ntrack_;
     int nvertex_;
     double pi_;
+    int bkgFactor_;
     int tHighPurityTracks_;
     int nVzBins;
     int nHITracks;
@@ -95,7 +97,8 @@ private:
     std::vector<double> vzBins_;
     std::vector<double> NptBins_;
     std::vector<std::vector<TVector3>> pVectVect_trg;
-    std::vector<std::vector<TVector3>> pVectVect_ass;
+    std::vector<std::vector<TVector3>> pVectVect_ass1;
+    std::vector<std::vector<TVector3>> pVectVect_ass2;
     std::vector<double> zvtxVect;
     
     double cutDzErrMax_;
@@ -106,12 +109,16 @@ private:
     
     double etaMinTrg_;
     double etaMaxTrg_;
-    double etaMinAsso_;
-    double etaMaxAsso_;
+    double etaMinAsso1_;
+    double etaMaxAsso1_;
+    double etaMinAsso2_;
+    double etaMaxAsso2_;
     double ptMinTrg_;
     double ptMaxTrg_;
-    double ptMinAsso_;
-    double ptMaxAsso_;
+    double ptMinAsso1_;
+    double ptMaxAsso1_;
+    double ptMinAsso2_;
+    double ptMaxAsso2_;
     
 };
 
@@ -144,12 +151,17 @@ vzBins_(iConfig.getParameter<std::vector<double> >("vzBins"))
     
     etaMinTrg_ = iConfig.getParameter<double>("etaMinTrg");
     etaMaxTrg_ = iConfig.getParameter<double>("etaMaxTrg");
-    etaMinAsso_ = iConfig.getParameter<double>("etaMinAsso");
-    etaMaxAsso_ = iConfig.getParameter<double>("etaMaxAsso");
+    etaMinAsso1_ = iConfig.getParameter<double>("etaMinAsso1");
+    etaMaxAsso1_ = iConfig.getParameter<double>("etaMaxAsso1");
+    etaMinAsso2_ = iConfig.getParameter<double>("etaMinAsso2");
+    etaMaxAsso2_ = iConfig.getParameter<double>("etaMaxAsso2");
     ptMinTrg_ = iConfig.getParameter<double>("ptMinTrg");
     ptMaxTrg_ = iConfig.getParameter<double>("ptMaxTrg");
-    ptMinAsso_ = iConfig.getParameter<double>("ptMinAsso");
-    ptMaxAsso_ = iConfig.getParameter<double>("ptMaxAsso");
+    ptMinAsso1_ = iConfig.getParameter<double>("ptMinAsso1");
+    ptMaxAsso1_ = iConfig.getParameter<double>("ptMaxAsso1");
+    ptMinAsso2_ = iConfig.getParameter<double>("ptMinAsso2");
+    ptMaxAsso2_ = iConfig.getParameter<double>("ptMaxAsso2");
+    bkgFactor_ = iConfig.getUntrackedParameter<int>("bkgFactor", 20);
     
 }
 
@@ -164,7 +176,8 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     
     tHighPurityTracks_ = 0;
     vector<TVector3> pVect_trg;
-    vector<TVector3> pVect_ass;
+    vector<TVector3> pVect_ass1;
+    vector<TVector3> pVect_ass2;
     
     Handle<reco::TrackCollection> tracks;
     iEvent.getByLabel(trackSrc_, tracks);
@@ -277,13 +290,22 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         TVector3 pvector;
         pvector.SetPtEtaPhi(track.pt(),track.eta(),track.phi());
         
-        if(track.eta()<=etaMaxAsso_ && track.eta()>=etaMinAsso_
-           && track.pt()<ptMaxAsso_ && track.pt()>ptMinAsso_)
+        if(track.eta()<=etaMaxAsso1_ && track.eta()>=etaMinAsso1_
+           && track.pt()<ptMaxAsso1_ && track.pt()>ptMinAsso1_)
         {
-            pVect_ass.push_back(pvector);
-            trkPerf_["ptAsso"]->Fill(track.pt());
-            trkPerf_["etaAsso"]->Fill(track.eta());
-            trkPerf_["phiAsso"]->Fill(track.phi());
+            pVect_ass1.push_back(pvector);
+            trkPerf_["ptAsso1"]->Fill(track.pt());
+            trkPerf_["etaAsso1"]->Fill(track.eta());
+            trkPerf_["phiAsso1"]->Fill(track.phi());
+        }
+        
+        if(track.eta()<=etaMaxAsso2_ && track.eta()>=etaMinAsso2_
+           && track.pt()<ptMaxAsso2_ && track.pt()>ptMinAsso2_)
+        {
+            pVect_ass2.push_back(pvector);
+            trkPerf_["ptAsso2"]->Fill(track.pt());
+            trkPerf_["etaAsso2"]->Fill(track.eta());
+            trkPerf_["phiAsso2"]->Fill(track.phi());
         }
         
         
@@ -302,35 +324,50 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     
     /////// Calculating the signal for di-hadron correlations ////////////////
     int nMultTrg = (int)pVect_trg.size();
-    int nMultAsso = (int)pVect_ass.size();
+    int nMultAsso1 = (int)pVect_ass1.size();
+    int nMultAsso2 = (int)pVect_ass2.size();
     
     for(int ntrg=0; ntrg<nMultTrg; ++ntrg)
     {
         TVector3 pvector_trg = (pVect_trg)[ntrg];
-        double eta_trg = pvector_trg.Eta();
+      //  double eta_trg = pvector_trg.Eta(); // Not needed for this analysis
         double phi_trg = pvector_trg.Phi();
         
-        for(int nass=0; nass<nMultAsso; nass++)
+        for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
         {
-            TVector3 pvector_ass = (pVect_ass)[nass];
-            double eta_ass = pvector_ass.Eta();
-            double phi_ass = pvector_ass.Phi();
+            TVector3 pvector_ass1 = (pVect_ass1)[nass_f];
+         //   double eta_ass_f = pvector_ass1.Eta(); // Not needed for this analysis
+            double phi_ass_f = pvector_ass1.Phi();
             
-            double deltaEta = eta_ass - eta_trg;
-            double deltaPhi = phi_ass - phi_trg;
-            if(deltaPhi > pi_) deltaPhi = deltaPhi - 2*pi_;
-            if(deltaPhi < -pi_) deltaPhi = deltaPhi + 2*pi_;
-            if(deltaPhi > -pi_ && deltaPhi < -pi_/2.0) deltaPhi = deltaPhi + 2*pi_;
+            for(int nass_s=nass_f+1; nass_s<nMultAsso2; nass_s++)
+            {
+                if(nass_s == nass_f) continue;
+                TVector3 pvector_ass2 = (pVect_ass2)[nass_s];
+                //  double eta_ass_s = pvector_ass2.Eta(); // Not needed for this analysis
+                double phi_ass_s = pvector_ass2.Phi();
+                
+                //  double deltaEta = eta_ass - eta_trg; // Not needed for this analysis
+                double deltaPhi1 = phi_ass_f - phi_trg;
+                double deltaPhi2 = phi_ass_s - phi_trg;
+                
+                if(deltaPhi1 > pi_) deltaPhi1 = deltaPhi1 - 2*pi_;
+                if(deltaPhi1 < -pi_) deltaPhi1 = deltaPhi1 + 2*pi_;
+                if(deltaPhi1 > -pi_ && deltaPhi1 < -pi_/2.0) deltaPhi1 = deltaPhi1 + 2*pi_;
+                
+                if(deltaPhi2 > pi_) deltaPhi2 = deltaPhi2 - 2*pi_;
+                if(deltaPhi2 < -pi_) deltaPhi2 = deltaPhi2 + 2*pi_;
+                if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
             
-            if(deltaEta == 0 && deltaPhi == 0) continue;
+                if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
             
-            hSignal->Fill(deltaEta,deltaPhi,1.0/nMultTrg);
-            
+                hSignal->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg);
+            } //Loop over associated particles
         } //Loop over associated particles
     } //Loop over trigger particles
     
     pVectVect_trg.push_back(pVect_trg);
-    pVectVect_ass.push_back(pVect_ass);
+    pVectVect_ass1.push_back(pVect_ass1);
+    pVectVect_ass2.push_back(pVect_ass2);
     zvtxVect.push_back(vsorted[0].z());
     
 }
@@ -391,14 +428,19 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
         hEventVzBin_[histoName2] = fs->make<TH1F>(histoName2, histoTitle2, 1, 0, 1);
     }
     
-    hSignal = fs->make<TH2D>("hSignal", ";#Delta#eta;#Delta#phi", 33,-5.0-0.15,5.0+0.15,31,-pi_/2+pi_/32,3*pi_/2-pi_/32);
-    hBackground = fs->make<TH2D>("hBackground", ";#Delta#eta;#Delta#phi", 33,-5.0-0.15,5.0+0.15,31,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal = fs->make<TH2D>("hSignal", ";#Delta#phi;#Delta#phi", 31,-pi_/2+pi_/32,3*pi_/2-pi_/32,31,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hBackground = fs->make<TH2D>("hBackground", ";#Delta#phi;#Delta#phi", 31,-pi_/2+pi_/32,3*pi_/2-pi_/32,31,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     
-    trkPerf_["ptAsso"] = fs->make<TH1F>("trkPtAsso", "Associated Track p_{T} Distribution;p_{T} [GeV/c]",100,0,10);
+    trkPerf_["ptAsso1"] = fs->make<TH1F>("trkPtAsso1", "Associated (1) Track p_{T} Distribution;p_{T} [GeV/c]",100,0,10);
+    trkPerf_["etaAsso1"] = fs->make<TH1F>("trkEtaAsso1", "Associated (1) Track pseudorapidity Distribution;#eta",51,-2.5,2.5);
+    trkPerf_["phiAsso1"] = fs->make<TH1F>("trkPhiAsso1", "Associated (1) Track Azimuthal Distribution;#phi",100,-3.15,3.15);
+    
+    trkPerf_["ptAsso2"] = fs->make<TH1F>("trkPtAsso2", "Associated (2) Track p_{T} Distribution;p_{T} [GeV/c]",100,0,10);
+    trkPerf_["etaAsso2"] = fs->make<TH1F>("trkEtaAsso2", "Associated (2) Track pseudorapidity Distribution;#eta",51,-2.5,2.5);
+    trkPerf_["phiAsso2"] = fs->make<TH1F>("trkPhiAsso2", "Associated (2) Track Azimuthal Distribution;#phi",100,-3.15,3.15);
+    
     trkPerf_["ptTrg"] = fs->make<TH1F>("trkPtTrg", "Trigger Track p_{T} Distribution;p_{T} [GeV/c]",100,0,10);
-    trkPerf_["etaAsso"] = fs->make<TH1F>("trkEtaAsso", "Associated Track pseudorapidity Distribution;#eta",51,-2.5,2.5);
     trkPerf_["etaTrg"] = fs->make<TH1F>("trkEtaTrg", "Trigger Track pseudorapidity Distribution;#eta",51,-2.5,2.5);
-    trkPerf_["phiAsso"] = fs->make<TH1F>("trkPhiAsso", "Associated Track Azimuthal Distribution;#phi",100,-3.15,3.15);
     trkPerf_["phiTrg"] = fs->make<TH1F>("trkPhiTrg", "Trigger Track Azimuthal Distribution;#phi",100,-3.15,3.15);
 }
 
@@ -452,95 +494,74 @@ TriHadronAnalyzer::endJob()
 {
     ////////////////// Calculating background for pi0-hadron correlations //////////
     int nevttotal_trg = (int)pVectVect_trg.size();
-    int nevttotal_ass = (int)pVectVect_ass.size();
+    int nevttotal_ass1 = (int)pVectVect_ass1.size();
+    int nevttotal_ass2 = (int)pVectVect_ass2.size();
     
-    unsigned int nBackgroundFill = 0;
-    unsigned int countAcceptedTriggerEvents = 0;
-    bool *acceptedTriggerEvents = new bool [nevttotal_trg];
-    
-    // Look at Z-Vertex differences
-    for(int nevt_trg=0; nevt_trg<nevttotal_trg; nevt_trg++) {
-        acceptedTriggerEvents[nevt_trg] = false;
-        for(int nevt_ass=0; nevt_ass<nevttotal_ass; nevt_ass++) {
-            
-            if(nevt_trg == nevt_ass)
-            continue;  // don't use the same event
-            if(fabs((zvtxVect)[nevt_trg] - (zvtxVect)[nevt_ass])<=2.0) {
-                acceptedTriggerEvents[nevt_trg] = true;
-                countAcceptedTriggerEvents++;
-                break; // found at least one partner event with a close enough Z vertex
-            }
-        } // loop over associated events
-    } // loop over trigger events
-    
-    for(int nevt_trg=0; nevt_trg<nevttotal_trg; nevt_trg++) {
-        
-        if(!acceptedTriggerEvents[nevt_trg])
-        continue;  // skip this trigger event which has no partner event close enough in Z
-        nBackgroundFill++;
-        
-        int countGoodAssociated = 0;
-        
-        for(int nevt_ass=0; nevt_ass<nevttotal_ass; nevt_ass++) {
-            if(nevt_trg == nevt_ass) { // check if the random trigger event matches this assocated event
-                continue;    // go to the next associated track
+    for(int nround=0;nround<bkgFactor_;nround++)
+    {
+        int ncount = 0;
+        for(int nevt_trg=0; nevt_trg<nevttotal_trg; nevt_trg++)
+        {
+            int nevt_ass1 = gRandom->Integer(nevttotal_ass1);
+            int nevt_ass2 = gRandom->Integer(nevttotal_ass2);
+            if(nevt_trg == nevt_ass1) { nevt_trg--; continue; }
+            if(fabs((*zvtxVect)[nevt_trg]-(*zvtxVect)[nevt_ass1])>0.5) {
+                nevt_trg--;
+                ncount++;
+                if(ncount>5000) {nevt_trg++; ncount = 0;}
+                continue;
             }
             
-            if(fabs((zvtxVect)[nevt_trg] - (zvtxVect)[nevt_ass])>2.0){  // check if the Z vertex of the trigger and associated are separated by more than 2 cm
-                continue;    // go to the next associated event
-            }
-            countGoodAssociated++;
-        }
-        
-        if(countGoodAssociated < 1) {
-            cout << "\n For nevt_trg " << nevt_trg << " the number of good associated events = " << countGoodAssociated << endl;
-            continue;
-        }
-        
-        int takeRandomInterval = 1;
-        if(countGoodAssociated > 10)
-        takeRandomInterval = countGoodAssociated/10 + 1 ;
-        
-        int takeAssociated = 0;
-        for(int nevt_ass=0; nevt_ass<nevttotal_ass; nevt_ass += takeRandomInterval) {
-            
-            if(nevt_trg == nevt_ass) { // check if the random trigger event matches this assocated event
-                continue;    // go to the next associated track
+            if(nevt_trg == nevt_ass2) { nevt_trg--; continue; }
+            if(fabs((*zvtxVect)[nevt_trg]-(*zvtxVect)[nevt_ass2])>0.5) {
+                nevt_trg--;
+                ncount++;
+                if(ncount>5000) {nevt_trg++; ncount = 0;}
+                continue;
             }
             
-            if(fabs((zvtxVect)[nevt_trg] - (zvtxVect)[nevt_ass])>2.0){  // check if the Z vertex of the trigger and associated are separated by more than 2 cm
-                continue;    // go to the next associated event
-            }
+            vector<TVector3> pVectTmp_trg = (*pVectVect_trg)[nevt_trg];
+            vector<TVector3> pVectTmp_ass1 = (*pVectVect_ass1)[nevt_ass1];
+            vector<TVector3> pVectTmp_ass2 = (*pVectVect_ass2)[nevt_ass2];
             
-            takeAssociated++;
-            if(takeAssociated > 10)
-            break;
-            
-            vector<TVector3> pVectTmp_trg = (pVectVect_trg)[nevt_trg];
-            vector<TVector3> pVectTmp_ass = (pVectVect_ass)[nevt_ass];
             int nMult_trg1 = pVectTmp_trg.size();
-            int nMult_ass1 = pVectTmp_ass.size();
+            int nMult_ass1 = pVectTmp_ass1.size();
+            int nMult_ass2 = pVectTmp_ass2.size();
             
             for(int ntrg=0; ntrg<nMult_trg1; ++ntrg)
             {
                 TVector3 pvectorTmp_trg = pVectTmp_trg[ntrg];
-                double eta_trg = pvectorTmp_trg.Eta();
+               // double eta_trg = pvectorTmp_trg.Eta();
                 double phi_trg = pvectorTmp_trg.Phi();
                 
-                for(int nass=0; nass<nMult_ass1; ++nass)
+                for(int nass_f=0; nass_f<nMult_ass1; ++nass_f)
                 {
+                    TVector3 pvectorTmp_ass1 = pVectTmp_ass1[nass_f];
+                   // double eta_ass1 = pvectorTmp_ass1.Eta();
+                    double phi_ass1 = pvectorTmp_ass1.Phi();
                     
-                    TVector3 pvectorTmp_ass = pVectTmp_ass[nass];
-                    double eta_ass = pvectorTmp_ass.Eta();
-                    double phi_ass = pvectorTmp_ass.Phi();
+                    for(int nass_s=nass_f+1; nass_s<nMult_ass1; ++nass_s)
+                    {
+                        if( nass_f == nass_s ) continue;
+                        TVector3 pvectorTmp_ass2 = pVectTmp_ass2[nass_s];
+                       // double eta_ass2 = pvectorTmp_ass2.Eta();
+                        double phi_ass2 = pvectorTmp_ass2.Phi();
+                        
+                       // double deltaEta = eta_ass - eta_trg;
+                        double deltaPhi1 = phi_ass1 - phi_trg;
+                        if(deltaPhi1 > pi_) deltaPhi1 = deltaPhi1 - 2*pi_;
+                        if(deltaPhi1 < -pi_) deltaPhi1 = deltaPhi1 + 2*pi_;
+                        if(deltaPhi1 > -pi_ && deltaPhi1 < -pi_/2.0) deltaPhi1 = deltaPhi1 + 2*pi_;
+                        
+                        double deltaPhi2 = phi_ass2 - phi_trg;
+                        if(deltaPhi2 > pi_) deltaPhi2 = deltaPhi2 - 2*pi_;
+                        if(deltaPhi2 < -pi_) deltaPhi2 = deltaPhi2 + 2*pi_;
+                        if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
+                        
+                        if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
                     
-                    double deltaEta = eta_ass - eta_trg;
-                    double deltaPhi = phi_ass - phi_trg;
-                    if(deltaPhi > pi_) deltaPhi = deltaPhi - 2*pi_;
-                    if(deltaPhi < -pi_) deltaPhi = deltaPhi + 2*pi_;
-                    if(deltaPhi > -pi_ && deltaPhi < -pi_/2.0) deltaPhi = deltaPhi + 2*pi_;
-                    
-                    hBackground->Fill(deltaEta,deltaPhi,1.0/nMult_trg1);
+                        hBackground->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1);
+                    }
                 }
             }
         }
