@@ -520,9 +520,9 @@ TriHadronAnalyzer::endJob()
                 continue;
             }
             
-            vector<TVector3> pVectTmp_trg = (*pVectVect_trg)[nevt_trg];
-            vector<TVector3> pVectTmp_ass1 = (*pVectVect_ass1)[nevt_ass1];
-            vector<TVector3> pVectTmp_ass2 = (*pVectVect_ass2)[nevt_ass2];
+            vector<TVector3> pVectTmp_trg = (pVectVect_trg)[nevt_trg];
+            vector<TVector3> pVectTmp_ass1 = (pVectVect_ass1)[nevt_ass1];
+            vector<TVector3> pVectTmp_ass2 = (pVectVect_ass2)[nevt_ass2];
             
             int nMult_trg1 = pVectTmp_trg.size();
             int nMult_ass1 = pVectTmp_ass1.size();
