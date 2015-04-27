@@ -50,7 +50,7 @@ using namespace reco;
 class TriHadronAnalyzer : public edm::EDAnalyzer {
 public:
     explicit TriHadronAnalyzer(const edm::ParameterSet&);
-    ~AwayAnalyzer();
+    ~TriHadronAnalyzer();
     static bool vtxSort( const reco::Vertex &  a, const reco::Vertex & b );
     bool TrackQualityCuts(const reco::Track & track, const reco::Vertex & vertexCollectionSelected);
     
@@ -175,7 +175,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     std::vector<reco::Vertex> vsorted = *vertex;
     // sort the vertcies by number of tracks in descending order
     // use chi2 as tiebreaker
-    std::sort( vsorted.begin(), vsorted.end(), AwayAnalyzer::vtxSort );
+    std::sort( vsorted.begin(), vsorted.end(), TriHadronAnalyzer::vtxSort );
     // skip events with no PV, this should not happen
     if( vsorted.size() == 0) return;
     // skip events failing vertex cut
