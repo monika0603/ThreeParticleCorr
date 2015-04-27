@@ -505,7 +505,7 @@ TriHadronAnalyzer::endJob()
             int nevt_ass1 = gRandom->Integer(nevttotal_ass1);
             int nevt_ass2 = gRandom->Integer(nevttotal_ass2);
             if(nevt_trg == nevt_ass1) { nevt_trg--; continue; }
-            if(fabs((*zvtxVect)[nevt_trg]-(*zvtxVect)[nevt_ass1])>0.5) {
+            if(fabs((zvtxVect)[nevt_trg]-(zvtxVect)[nevt_ass1])>0.5) {
                 nevt_trg--;
                 ncount++;
                 if(ncount>5000) {nevt_trg++; ncount = 0;}
@@ -513,7 +513,7 @@ TriHadronAnalyzer::endJob()
             }
             
             if(nevt_trg == nevt_ass2) { nevt_trg--; continue; }
-            if(fabs((*zvtxVect)[nevt_trg]-(*zvtxVect)[nevt_ass2])>0.5) {
+            if(fabs((zvtxVect)[nevt_trg]-(zvtxVect)[nevt_ass2])>0.5) {
                 nevt_trg--;
                 ncount++;
                 if(ncount>5000) {nevt_trg++; ncount = 0;}
