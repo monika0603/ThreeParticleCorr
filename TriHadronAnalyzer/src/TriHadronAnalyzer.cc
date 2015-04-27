@@ -540,7 +540,7 @@ TriHadronAnalyzer::endJob()
                    // double eta_ass1 = pvectorTmp_ass1.Eta();
                     double phi_ass1 = pvectorTmp_ass1.Phi();
                     
-                    for(int nass_s=nass_f+1; nass_s<nMult_ass1; ++nass_s)
+                    for(int nass_s=nass_f+1; nass_s<nMult_ass2; ++nass_s)
                     {
                         if( nass_f == nass_s ) continue;
                         TVector3 pvectorTmp_ass2 = pVectTmp_ass2[nass_s];
@@ -567,7 +567,6 @@ TriHadronAnalyzer::endJob()
         }
     }
     
-    delete [] acceptedTriggerEvents;
     
 }
 
