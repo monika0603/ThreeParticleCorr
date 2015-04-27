@@ -47,9 +47,9 @@ using namespace std;
 using namespace edm;
 using namespace reco;
 
-class AwayAnalyzer : public edm::EDAnalyzer {
+class TriHadronAnalyzer : public edm::EDAnalyzer {
 public:
-    explicit AwayAnalyzer(const edm::ParameterSet&);
+    explicit TriHadronAnalyzer(const edm::ParameterSet&);
     ~AwayAnalyzer();
     static bool vtxSort( const reco::Vertex &  a, const reco::Vertex & b );
     bool TrackQualityCuts(const reco::Track & track, const reco::Vertex & vertexCollectionSelected);
@@ -115,7 +115,7 @@ private:
     
 };
 
-AwayAnalyzer::AwayAnalyzer(const edm::ParameterSet& iConfig):
+TriHadronAnalyzer::TriHadronAnalyzer(const edm::ParameterSet& iConfig):
 nevt_(0),
 ntrack_(0),
 nvertex_(0),
@@ -154,12 +154,12 @@ vzBins_(iConfig.getParameter<std::vector<double> >("vzBins"))
 }
 
 
-AwayAnalyzer::~AwayAnalyzer()
+TriHadronAnalyzer::~TriHadronAnalyzer()
 {
 }
 
 void
-AwayAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
     
     tHighPurityTracks_ = 0;
@@ -336,7 +336,7 @@ AwayAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 }
 
 void
-AwayAnalyzer::initHistos(const edm::Service<TFileService> & fs)
+TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
 {
     
     TH1D::SetDefaultSumw2();
@@ -403,7 +403,7 @@ AwayAnalyzer::initHistos(const edm::Service<TFileService> & fs)
 }
 
 bool
-AwayAnalyzer::vtxSort( const reco::Vertex &  a, const reco::Vertex & b )
+TriHadronAnalyzer::vtxSort( const reco::Vertex &  a, const reco::Vertex & b )
 {
     if( a.tracksSize() != b.tracksSize() )
     return  a.tracksSize() > b.tracksSize() ? true : false ;
@@ -412,7 +412,7 @@ AwayAnalyzer::vtxSort( const reco::Vertex &  a, const reco::Vertex & b )
 }
 
 bool
-AwayAnalyzer::TrackQualityCuts(const reco::Track & track, const reco::Vertex & vertexCollectionSelected)
+TriHadronAnalyzer::TrackQualityCuts(const reco::Track & track, const reco::Vertex & vertexCollectionSelected)
 {
     
     math::XYZPoint vtxPoint(0.0,0.0,0.0);
@@ -442,13 +442,13 @@ AwayAnalyzer::TrackQualityCuts(const reco::Track & track, const reco::Vertex & v
 
 // ------------ method called once each job just before starting event loop  ------------
 void
-AwayAnalyzer::beginJob()
+TriHadronAnalyzer::beginJob()
 {
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
 void
-AwayAnalyzer::endJob()
+TriHadronAnalyzer::endJob()
 {
     ////////////////// Calculating background for pi0-hadron correlations //////////
     int nevttotal_trg = (int)pVectVect_trg.size();
