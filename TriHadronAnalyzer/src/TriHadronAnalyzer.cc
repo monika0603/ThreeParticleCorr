@@ -43,6 +43,7 @@
 #include "TVector3.h"
 #include "assert.h"
 #include <stdlib.h>
+#include <TRandom.h>
 
 using namespace std;
 using namespace edm;
