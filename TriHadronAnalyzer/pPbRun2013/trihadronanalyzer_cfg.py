@@ -53,7 +53,8 @@ process.TriHadronAnalysis = cms.EDAnalyzer('TriHadronAnalyzer',
                                           )
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("pPb_Pbp_CombinedDiHadronCorrFunc_NoCutetaTrg_EtaAsso_0_1_2_Pt3_10.root")
+                                   fileName = cms.string("
+                                                         TriHadronFirstAttempt.root")
                                    )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 process.GlobalTag.globaltag = 'GR_P_V42_AN3::All'
