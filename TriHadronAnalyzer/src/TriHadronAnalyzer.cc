@@ -429,8 +429,8 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
         hEventVzBin_[histoName2] = fs->make<TH1F>(histoName2, histoTitle2, 1, 0, 1);
     }
     
-    hSignal = fs->make<TH2D>("hSignal", ";#Delta#phi;#Delta#phi", 31,-pi_/2+pi_/32,3*pi_/2-pi_/32,31,-pi_/2+pi_/32,3*pi_/2-pi_/32);
-    hBackground = fs->make<TH2D>("hBackground", ";#Delta#phi;#Delta#phi", 31,-pi_/2+pi_/32,3*pi_/2-pi_/32,31,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal = fs->make<TH2D>("hSignal", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hBackground = fs->make<TH2D>("hBackground", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     
     trkPerf_["ptAsso1"] = fs->make<TH1F>("trkPtAsso1", "Associated (1) Track p_{T} Distribution;p_{T} [GeV/c]",100,0,10);
     trkPerf_["etaAsso1"] = fs->make<TH1F>("trkEtaAsso1", "Associated (1) Track pseudorapidity Distribution;#eta",51,-2.5,2.5);
