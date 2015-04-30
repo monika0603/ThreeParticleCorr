@@ -44,11 +44,11 @@ process.TriHadronAnalysis = cms.EDAnalyzer('TriHadronAnalyzer',
                                           etaMinAsso2 = cms.double(-2.4),
                                           etaMaxAsso2 = cms.double(2.4),
                                           ptMinTrg = cms.double(3.0),
-                                          ptMaxTrg = cms.double(10.0),
-                                          ptMinAsso1 = cms.double(0.41),
-                                          ptMaxAsso1 = cms.double(3.0),
-                                          ptMinAsso2 = cms.double(0.41),
-                                          ptMaxAsso2 = cms.double(3.0),
+                                          ptMaxTrg = cms.double(4.0),
+                                          ptMinAsso1 = cms.double(1.0),
+                                          ptMaxAsso1 = cms.double(2.0),
+                                          ptMinAsso2 = cms.double(1.0),
+                                          ptMaxAsso2 = cms.double(2.0),
                                           bkgFactor = cms.untracked.int32(20)
                                           )
 
