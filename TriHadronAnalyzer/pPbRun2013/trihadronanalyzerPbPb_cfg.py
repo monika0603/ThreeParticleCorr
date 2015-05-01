@@ -62,7 +62,7 @@ process.GlobalTag.globaltag = 'GR_R_53_LV6::All'
 from HeavyIonsAnalysis.Configuration.CommonFunctions_cff import *
 
 process.HeavyIonGlobalParameters = cms.PSet(
-                                            centralityVariable = cms.string("HFtowersPlusTrunc"),
+                                            centralityVariable = cms.string("HFtowers"),
                                             nonDefaultGlauberModel = cms.string(""),
                                             centralitySrc = cms.InputTag("hiCentrality")
                                             )
