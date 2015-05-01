@@ -23,7 +23,7 @@ process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 process.TriHadronAnalysis = cms.EDAnalyzer('TriHadronAnalyzer',
                                           verbose = cms.untracked.bool(True),
-                                          vertexSrc = cms.InputTag("offlinePrimaryVerticesWithBS"),
+                                          vertexSrc = cms.InputTag("hiSelectedVertex"),
                                           trackSrc = cms.InputTag("generalTracks"),
                                           etaMin = cms.double(-3.0),
                                           etaMax = cms.double(3.0),
