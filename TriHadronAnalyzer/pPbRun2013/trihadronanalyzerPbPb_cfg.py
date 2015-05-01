@@ -79,8 +79,8 @@ process.hltSingleTrigger.andOr = cms.bool(True)
 process.hltSingleTrigger.throw = cms.bool(False)
 
 process.TriHadronAnalysisMult100 = process.TriHadronAnalysis.clone(
-                                                                 cutMultMin = cms.double(1000),
-                                                                 cutMultMax = cms.double(1200)
+                                                                 cutMultMin = cms.double(100),
+                                                                 cutMultMax = cms.double(120)
                                                                  )
 
 process.TriHadronAnalysisMult130 = process.TriHadronAnalysis.clone(
