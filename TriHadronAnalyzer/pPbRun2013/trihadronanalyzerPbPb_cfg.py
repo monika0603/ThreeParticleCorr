@@ -122,7 +122,7 @@ process.schedule = cms.Schedule(process.Mult100,process.Mult130,process.Mult160,
 
 process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring(
-                                                              '/store/hidata/HIRun2011/HIMinBiasUPC/RECO/14Mar2014-v2/00000/0008E152-62AE-E311-BB69-FA163E565820.root'
+                                                              '/store/hidata/HIRun2011/HIMinBiasUPC/RECO/14Mar2014-v2/00000/0011854A-F0AD-E311-885B-FA163E32A814.root'
                                                               )
                             )
 
