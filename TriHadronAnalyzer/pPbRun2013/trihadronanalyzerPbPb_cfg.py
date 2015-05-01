@@ -99,22 +99,22 @@ process.TriHadronAnalysisMult190 = process.TriHadronAnalysis.clone(
                                                                  )
 
 process.Mult100 = cms.Path(process.hltSingleTrigger *
-                           process.PAcollisionEventSelection *
+                           process.collisionEventSelection *
                            process.TriHadronAnalysisMult100
                            )
 
 process.Mult130 = cms.Path(process.hltSingleTrigger *
-                           process.PAcollisionEventSelection *
+                           process.collisionEventSelection *
                            process.TriHadronAnalysisMult130
                            )
 
 process.Mult160 = cms.Path(process.hltSingleTrigger *
-                           process.PAcollisionEventSelection *
+                           process.collisionEventSelection *
                            process.TriHadronAnalysisMult160
                            )
 
 process.Mult190 = cms.Path(process.hltSingleTrigger *
-                           process.PAcollisionEventSelection *
+                           process.collisionEventSelection *
                            process.TriHadronAnalysisMult190
                            )
 
