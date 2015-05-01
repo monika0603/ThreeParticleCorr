@@ -57,7 +57,7 @@ process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("TriHadronFirstAttempt.root")
                                    )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
-process.GlobalTag.globaltag = 'FT_R_53_LV6::All'
+process.GlobalTag.globaltag = 'GR_R_53_LV6::All'
 
 from HeavyIonsAnalysis.Configuration.CommonFunctions_cff import *
 
