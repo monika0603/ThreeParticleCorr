@@ -103,17 +103,17 @@ process.Mult100 = cms.Path(process.hltSingleTrigger *
                            process.TriHadronAnalysisMult100
                            )
 
-process.Mult130 = cms.Path(process.hltMult130 *
+process.Mult130 = cms.Path(process.hltSingleTrigger *
                            process.PAcollisionEventSelection *
                            process.TriHadronAnalysisMult130
                            )
 
-process.Mult160 = cms.Path(process.hltMult160 *
+process.Mult160 = cms.Path(process.hltSingleTrigger *
                            process.PAcollisionEventSelection *
                            process.TriHadronAnalysisMult160
                            )
 
-process.Mult190 = cms.Path(process.hltMult190 *
+process.Mult190 = cms.Path(process.hltSingleTrigger *
                            process.PAcollisionEventSelection *
                            process.TriHadronAnalysisMult190
                            )
