@@ -340,7 +340,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
          //   double eta_ass_f = pvector_ass1.Eta(); // Not needed for this analysis
             double phi_ass_f = pvector_ass1.Phi();
             
-            for(int nass_s=nass_f+1; nass_s<nMultAsso2; nass_s++)
+            for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
             {
                 if(nass_s == nass_f) continue;
                 TVector3 pvector_ass2 = (pVect_ass2)[nass_s];
