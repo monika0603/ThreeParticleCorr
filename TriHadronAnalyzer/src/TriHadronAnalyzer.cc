@@ -53,8 +53,9 @@ class TriHadronAnalyzer : public edm::EDAnalyzer {
 public:
     explicit TriHadronAnalyzer(const edm::ParameterSet&);
     ~TriHadronAnalyzer();
-    static bool vtxSort( const reco::Vertex &  a, const reco::Vertex & b );
+    static bool vtxSort(const reco::Vertex &  a, const reco::Vertex & b);
     bool TrackQualityCuts(const reco::Track & track, const reco::Vertex & vertexCollectionSelected);
+    int getEtaRegion(double eta);
     
     
 private:
@@ -331,23 +332,28 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     for(int ntrg=0; ntrg<nMultTrg; ++ntrg)
     {
         TVector3 pvector_trg = (pVect_trg)[ntrg];
-      //  double eta_trg = pvector_trg.Eta(); // Not needed for this analysis
         double phi_trg = pvector_trg.Phi();
+        double eta_trg = pvector_trg.Eta();
+        int trgEta_ = getEtaRegion(eta_trg);
+        cout<<"The value of trigger eta is = "<<trgEta_<<endl;
         
         for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
         {
             TVector3 pvector_ass1 = (pVect_ass1)[nass_f];
-         //   double eta_ass_f = pvector_ass1.Eta(); // Not needed for this analysis
             double phi_ass_f = pvector_ass1.Phi();
+            double eta_ass_f = pvector_ass1.Eta();
+            int ass_fEta_ = getEtaRegion(eta_ass_f);
+            cout<<"The value of first associated eta is = "<<ass_fEta_<<endl;
             
             for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
             {
                 if(nass_s == nass_f) continue;
                 TVector3 pvector_ass2 = (pVect_ass2)[nass_s];
-                //  double eta_ass_s = pvector_ass2.Eta(); // Not needed for this analysis
                 double phi_ass_s = pvector_ass2.Phi();
+                double eta_ass_s = pvector_ass2.Eta();
+                int ass_sEta_ = getEtaRegion(eta_ass_s);
+                cout<<"The value of second associated eta is = "<<ass_sEta_<<endl;
                 
-                //  double deltaEta = eta_ass - eta_trg; // Not needed for this analysis
                 double deltaPhi1 = phi_ass_f - phi_trg;
                 double deltaPhi2 = phi_ass_s - phi_trg;
                 
@@ -361,6 +367,8 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             
                 if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
             
+                if(trgEta_ == 0 && ass_fEta_ == 0 && ass_sEta_==0)
+                cout<<"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"<<endl;
                 hSignal->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg);
             } //Loop over associated particles
         } //Loop over associated particles
@@ -479,6 +487,15 @@ TriHadronAnalyzer::TrackQualityCuts(const reco::Track & track, const reco::Verte
     
     return true;
     
+}
+
+int
+TriHadronAnalyzer::getEtaRegion(const double eta)
+{
+    if(eta > -2.4 && eta < 0.0) return 0;
+    if(eta >= 0.0 && eta < 2.4) return 1;
+    
+    else return -1;
 }
 
 
