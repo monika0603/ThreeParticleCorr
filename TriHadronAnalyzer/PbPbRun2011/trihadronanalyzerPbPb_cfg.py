@@ -24,7 +24,7 @@ process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 process.TriHadronAnalysis = cms.EDAnalyzer('TriHadronAnalyzer',
                                           verbose = cms.untracked.bool(True),
                                           vertexSrc = cms.InputTag("hiSelectedVertex"),
-                                          trackSrc = cms.InputTag("hiSelectedTracks"),
+                                          trackSrc = cms.InputTag("hiGeneralTracks"),
                                           etaMin = cms.double(-3.0),
                                           etaMax = cms.double(3.0),
                                           ptMin = cms.double(0.4),
@@ -57,7 +57,7 @@ process.TFileService = cms.Service("TFileService",
                                    fileName = cms.string("TriHadronFirstAttempt.root")
                                    )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
-process.GlobalTag.globaltag = 'GR_R_53_LV6::All'
+process.GlobalTag.globaltag = 'FT_R_53_LV6::All'
 
 from HeavyIonsAnalysis.Configuration.CommonFunctions_cff import *
 
