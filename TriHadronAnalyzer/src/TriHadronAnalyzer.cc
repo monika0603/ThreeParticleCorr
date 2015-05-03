@@ -335,7 +335,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         TVector3 pvector_trg = (pVect_trg)[ntrg];
         double phi_trg = pvector_trg.Phi();
         double eta_trg = pvector_trg.Eta();
-        int trgEta_ = getEtaRegion(eta_trg);
+      //  int trgEta_ = getEtaRegion(eta_trg);
         
         for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
         {
@@ -570,7 +570,7 @@ TriHadronAnalyzer::endJob()
                 TVector3 pvectorTmp_trg = pVectTmp_trg[ntrg];
                 double phi_trg = pvectorTmp_trg.Phi();
                 double eta_trg = pvectorTmp_trg.Eta();
-                int trgEta_ = getEtaRegion(eta_trg);
+              //  int trgEta_ = getEtaRegion(eta_trg);
                 
                 for(int nass_f=0; nass_f<nMult_ass1; ++nass_f)
                 {
