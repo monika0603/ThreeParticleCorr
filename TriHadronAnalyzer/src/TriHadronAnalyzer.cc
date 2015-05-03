@@ -366,19 +366,15 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
             
                 if(ass_fEta_ == 0 && ass_sEta_==0) {
-                    cout<<"$$$$$$$$$$$$$$$ (0)-(0)"<<endl;
                     hSignal_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                 
                 if(ass_fEta_ == 1 && ass_sEta_==1) {
-                    cout<<"$$$$$$$$$$$$$$$ (1)-(1)"<<endl;
                     hSignal_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                 
                 if(ass_fEta_ == 0 && ass_sEta_==1) {
-                    cout<<"$$$$$$$$$$$$$$$ (0)-(1)"<<endl;
                     hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                 
                 if(ass_fEta_ == 1 && ass_sEta_==0) {
-                    cout<<"$$$$$$$$$$$$$$$ (1)-(0)"<<endl;
                     hSignal_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                 
             } //Loop over associated particles
