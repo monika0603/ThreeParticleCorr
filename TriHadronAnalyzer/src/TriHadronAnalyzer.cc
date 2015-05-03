@@ -367,19 +367,19 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             
                 if(ass_fEta_ == 0 && ass_sEta_==0) {
                     cout<<"$$$$$$$$$$$$$$$ (0)-(0)"<<endl;
-                    hSignal0->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                    hSignal_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                 
                 if(ass_fEta_ == 1 && ass_sEta_==1) {
                     cout<<"$$$$$$$$$$$$$$$ (1)-(1)"<<endl;
-                    hSignal1->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                    hSignal_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                 
                 if(ass_fEta_ == 0 && ass_sEta_==1) {
                     cout<<"$$$$$$$$$$$$$$$ (0)-(1)"<<endl;
-                    hSignal_af0_as1->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                    hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                 
                 if(ass_fEta_ == 1 && ass_sEta_==0) {
                     cout<<"$$$$$$$$$$$$$$$ (1)-(0)"<<endl;
-                    hSignal_af1_as0->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                    hSignal_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                 
             } //Loop over associated particles
         } //Loop over associated particles
@@ -601,16 +601,16 @@ TriHadronAnalyzer::endJob()
                         if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
                         
                         if(ass_fEta_ == 0 && ass_sEta_==0) {
-                            hBackground0->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                            hBackground_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                         
                         if(ass_fEta_ == 1 && ass_sEta_==1) {
-                            hBackground1->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                            hBackground_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                         
                         if(ass_fEta_ == 0 && ass_sEta_==1) {
-                            hBackground_af0_as1->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                            hBackground_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                         
                         if(ass_fEta_ == 1 && ass_sEta_==0) {
-                            hBackground_af1_as0->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                            hBackground_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                     
                     }
                 }
