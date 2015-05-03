@@ -71,11 +71,12 @@ private:
     std::map<std::string,TH2F*> vtxPerf2D_;
     std::map<std::string,TH1F*> hdNdEtaVzBin_;
     std::map<std::string,TH1F*> hEventVzBin_;
+    std::map<std::string,TH2D*> hSignal_;
+    std::map<std::string,TH2D*> hBackground_;
+    
     
     TH1F* events_;
     TH1F* vertices_;
-    TH2D* hSignal;
-    TH2D* hBackground;
     
     int nevt_;
     int ntrack_;
@@ -335,7 +336,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         double phi_trg = pvector_trg.Phi();
         double eta_trg = pvector_trg.Eta();
         int trgEta_ = getEtaRegion(eta_trg);
-        cout<<"The value of trigger eta is = "<<trgEta_<<endl;
         
         for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
         {
@@ -343,7 +343,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             double phi_ass_f = pvector_ass1.Phi();
             double eta_ass_f = pvector_ass1.Eta();
             int ass_fEta_ = getEtaRegion(eta_ass_f);
-            cout<<"The value of first associated eta is = "<<ass_fEta_<<endl;
             
             for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
             {
@@ -352,7 +351,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 double phi_ass_s = pvector_ass2.Phi();
                 double eta_ass_s = pvector_ass2.Eta();
                 int ass_sEta_ = getEtaRegion(eta_ass_s);
-                cout<<"The value of second associated eta is = "<<ass_sEta_<<endl;
                 
                 double deltaPhi1 = phi_ass_f - phi_trg;
                 double deltaPhi2 = phi_ass_s - phi_trg;
@@ -367,9 +365,22 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             
                 if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
             
-                if(trgEta_ == 0 && ass_fEta_ == 0 && ass_sEta_==0)
-                cout<<"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"<<endl;
-                hSignal->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg);
+                if(ass_fEta_ == 0 && ass_sEta_==0) {
+                    cout<<"$$$$$$$$$$$$$$$ (0)-(0)"<<endl;
+                    hSignal0->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                
+                if(ass_fEta_ == 1 && ass_sEta_==1) {
+                    cout<<"$$$$$$$$$$$$$$$ (1)-(1)"<<endl;
+                    hSignal1->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                
+                if(ass_fEta_ == 0 && ass_sEta_==1) {
+                    cout<<"$$$$$$$$$$$$$$$ (0)-(1)"<<endl;
+                    hSignal_af0_as1->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                
+                if(ass_fEta_ == 1 && ass_sEta_==0) {
+                    cout<<"$$$$$$$$$$$$$$$ (1)-(0)"<<endl;
+                    hSignal_af1_as0->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                
             } //Loop over associated particles
         } //Loop over associated particles
     } //Loop over trigger particles
@@ -437,8 +448,16 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
         hEventVzBin_[histoName2] = fs->make<TH1F>(histoName2, histoTitle2, 1, 0, 1);
     }
     
-    hSignal = fs->make<TH2D>("hSignal", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
-    hBackground = fs->make<TH2D>("hBackground", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["0"] = fs->make<TH2D>("hSignal0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["1"] = fs->make<TH2D>("hSignal1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["af0_as1"] = fs->make<TH2D>("hSignal_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["af1_as0"] = fs->make<TH2D>("hSignal_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    
+    hBackground_["0"] = fs->make<TH2D>("hBackground0", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hBackground_["1"] = fs->make<TH2D>("hBackground1", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hBackground_["af0_as1"] = fs->make<TH2D>("hBackground_af0_as1", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hBackground_["af1_as0"] = fs->make<TH2D>("hBackground_af1_as0", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+
     
     trkPerf_["ptAsso1"] = fs->make<TH1F>("trkPtAsso1", "Associated (1) Track p_{T} Distribution;p_{T} [GeV/c]",100,0,10);
     trkPerf_["etaAsso1"] = fs->make<TH1F>("trkEtaAsso1", "Associated (1) Track pseudorapidity Distribution;#eta",51,-2.5,2.5);
@@ -549,21 +568,24 @@ TriHadronAnalyzer::endJob()
             for(int ntrg=0; ntrg<nMult_trg1; ++ntrg)
             {
                 TVector3 pvectorTmp_trg = pVectTmp_trg[ntrg];
-               // double eta_trg = pvectorTmp_trg.Eta();
                 double phi_trg = pvectorTmp_trg.Phi();
+                double eta_trg = pvectorTmp_trg.Eta();
+                int trgEta_ = getEtaRegion(eta_trg);
                 
                 for(int nass_f=0; nass_f<nMult_ass1; ++nass_f)
                 {
                     TVector3 pvectorTmp_ass1 = pVectTmp_ass1[nass_f];
-                   // double eta_ass1 = pvectorTmp_ass1.Eta();
                     double phi_ass1 = pvectorTmp_ass1.Phi();
+                    double eta_ass1 = pvectorTmp_ass1.Eta();
+                    int ass_fEta_ = getEtaRegion(eta_ass1);
                     
-                    for(int nass_s=nass_f+1; nass_s<nMult_ass2; ++nass_s)
+                    for(int nass_s=0; nass_s<nMult_ass2; ++nass_s)
                     {
                         if( nass_f == nass_s ) continue;
                         TVector3 pvectorTmp_ass2 = pVectTmp_ass2[nass_s];
-                       // double eta_ass2 = pvectorTmp_ass2.Eta();
                         double phi_ass2 = pvectorTmp_ass2.Phi();
+                        double eta_ass2 = pvectorTmp_ass2.Eta();
+                        int ass_sEta_ = getEtaRegion(eta_ass2);
                         
                        // double deltaEta = eta_ass - eta_trg;
                         double deltaPhi1 = phi_ass1 - phi_trg;
@@ -577,8 +599,19 @@ TriHadronAnalyzer::endJob()
                         if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
                         
                         if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
+                        
+                        if(ass_fEta_ == 0 && ass_sEta_==0) {
+                            hBackground0->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                        
+                        if(ass_fEta_ == 1 && ass_sEta_==1) {
+                            hBackground1->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                        
+                        if(ass_fEta_ == 0 && ass_sEta_==1) {
+                            hBackground_af0_as1->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                        
+                        if(ass_fEta_ == 1 && ass_sEta_==0) {
+                            hBackground_af1_as0->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
                     
-                        hBackground->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1);
                     }
                 }
             }
