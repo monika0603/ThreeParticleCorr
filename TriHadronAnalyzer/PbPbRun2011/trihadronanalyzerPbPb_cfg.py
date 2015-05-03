@@ -80,21 +80,21 @@ process.hltSingleTrigger.throw = cms.bool(False)
 
 process.TriHadronAnalysisMult100 = process.TriHadronAnalysis.clone(
                                                                  cutMultMin = cms.double(100),
-                                                                 cutMultMax = cms.double(120)
+                                                                 cutMultMax = cms.double(150)
                                                                  )
 
 process.TriHadronAnalysisMult130 = process.TriHadronAnalysis.clone(
-                                                                 cutMultMin = cms.double(1200),
+                                                                 cutMultMin = cms.double(1000),
                                                                  cutMultMax = cms.double(1400)
                                                                  )
 
 process.TriHadronAnalysisMult160 = process.TriHadronAnalysis.clone(
                                                                  cutMultMin = cms.double(1400),
-                                                                 cutMultMax = cms.double(1600)
+                                                                 cutMultMax = cms.double(1800)
                                                                  )
 
 process.TriHadronAnalysisMult190 = process.TriHadronAnalysis.clone(
-                                                                 cutMultMin = cms.double(1600),
+                                                                 cutMultMin = cms.double(0),
                                                                  cutMultMax = cms.double(1800)
                                                                  )
 
