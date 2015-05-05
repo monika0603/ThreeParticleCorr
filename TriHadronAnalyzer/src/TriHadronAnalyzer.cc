@@ -288,7 +288,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     if (!centProvider) centProvider = new CentralityProvider(iSetup);
     centProvider->newEvent(iEvent,iSetup);
     //const reco::Centrality* centrality = centProvider->raw();
-    hiBin = centProvider->getBin();
+    double hiBin = centProvider->getBin();
 
     cout<<"hiBin = "<<hiBin<<endl;
     
