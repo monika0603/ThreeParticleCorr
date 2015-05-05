@@ -283,6 +283,15 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         
     }
     
+    ////////// Centrality definition in PbPb //////////////
+    CentralityProvider * centProvider = 0;
+    if (!centProvider) centProvider = new CentralityProvider(iSetup);
+    centProvider->newEvent(iEvent,iSetup);
+    const reco::Centrality* centrality = centProvider->raw();
+    hiBin = centProvider->getBin();
+
+    cout<<"hiBin = "<<hiBin<<endl;
+    
     if( !(tHighPurityTracks_ >= cutMultMin_ && tHighPurityTracks_ < cutMultMax_)) return;
     evtPerf_["NHPtrk"]->Fill(tHighPurityTracks_);
     
