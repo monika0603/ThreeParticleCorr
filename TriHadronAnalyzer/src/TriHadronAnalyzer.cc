@@ -294,6 +294,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     
     if( !(hiBin >= cutMultMin_ && hiBin < cutMultMax_)) return;
     evtPerf_["NHPtrk"]->Fill(tHighPurityTracks_);
+    cout<<"Centrality = "<<hiBin<<endl;
     
     for( const auto & track : *tracks)
     {
