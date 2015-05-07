@@ -290,11 +290,8 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     //const reco::Centrality* centrality = centProvider->raw();
     double hiBin = centProvider->getBin();
 
-    cout<<"hiBin = "<<hiBin<<endl;
-    
     if( !(hiBin >= cutMultMin_ && hiBin < cutMultMax_)) return;
     evtPerf_["NHPtrk"]->Fill(tHighPurityTracks_);
-    cout<<"Centrality = "<<hiBin<<endl;
     
     for( const auto & track : *tracks)
     {
