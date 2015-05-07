@@ -33,8 +33,8 @@ process.TriHadronAnalysis = cms.EDAnalyzer('TriHadronAnalyzer',
                                           etaBins = cms.vdouble(-2.4, 0.0, 2.4),
                                           vzBins = cms.vdouble(-15.0, -13.0, -11.0, -9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0, 11.0, 13.0, 15.0),
                                           NptBins = cms.vdouble(1.6, 2.0, 2.5, 3.0, 4.0, 5.0, 6.0, 8.0),
-                                          cutMultMin = cms.double(0.0),
-                                          cutMultMax = cms.double(1000.0),
+                                          cutMultMin = cms.double(0),
+                                          cutMultMax = cms.double(39),
                                           cutDzErrMax = cms.untracked.double(3.0),
                                           cutDxyErrMax = cms.untracked.double(3.0),
                                           cutPtErrMax = cms.untracked.double(0.1),
@@ -78,47 +78,98 @@ process.hltSingleTrigger.HLTPaths = ["HLT_HIMinBiasHfOrBSC_v*"]
 process.hltSingleTrigger.andOr = cms.bool(True)
 process.hltSingleTrigger.throw = cms.bool(False)
 
-process.TriHadronAnalysisMult100 = process.TriHadronAnalysis.clone(
-                                                                 cutMultMin = cms.double(100),
-                                                                 cutMultMax = cms.double(150)
-                                                                 )
-
-process.TriHadronAnalysisMult130 = process.TriHadronAnalysis.clone(
-                                                                 cutMultMin = cms.double(1000),
-                                                                 cutMultMax = cms.double(1400)
-                                                                 )
-
-process.TriHadronAnalysisMult160 = process.TriHadronAnalysis.clone(
-                                                                 cutMultMin = cms.double(1400),
-                                                                 cutMultMax = cms.double(1800)
-                                                                 )
-
-process.TriHadronAnalysisMult190 = process.TriHadronAnalysis.clone(
+process.TriHadronAnalysisMult0_10 = process.TriHadronAnalysis.clone(
                                                                  cutMultMin = cms.double(0),
-                                                                 cutMultMax = cms.double(1800)
+                                                                 cutMultMax = cms.double(4)
                                                                  )
 
-process.Mult100 = cms.Path(process.hltSingleTrigger *
+process.TriHadronAnalysisMult10_20 = process.TriHadronAnalysis.clone(
+                                                                 cutMultMin = cms.double(4),
+                                                                 cutMultMax = cms.double(8)
+                                                                 )
+
+process.TriHadronAnalysisMult20_30 = process.TriHadronAnalysis.clone(
+                                                                 cutMultMin = cms.double(8),
+                                                                 cutMultMax = cms.double(12)
+                                                                 )
+
+process.TriHadronAnalysisMult30_40 = process.TriHadronAnalysis.clone(
+                                                                 cutMultMin = cms.double(12),
+                                                                 cutMultMax = cms.double(16)
+                                                                 )
+
+process.TriHadronAnalysisMult40_50 = process.TriHadronAnalysis.clone(
+                                                                 cutMultMin = cms.double(16),
+                                                                 cutMultMax = cms.double(20)
+                                                                 )
+
+process.TriHadronAnalysisMult50_60 = process.TriHadronAnalysis.clone(
+                                                                 cutMultMin = cms.double(20),
+                                                                 cutMultMax = cms.double(24)
+                                                                 )
+
+process.TriHadronAnalysisMult60_70 = process.TriHadronAnalysis.clone(
+                                                                 cutMultMin = cms.double(24),
+                                                                 cutMultMax = cms.double(28)
+                                                                 )
+
+process.TriHadronAnalysisMult70_80 = process.TriHadronAnalysis.clone(
+                                                                 cutMultMin = cms.double(28),
+                                                                 cutMultMax = cms.double(32)
+                                                                 )
+
+process.TriHadronAnalysisMultMinBias = process.TriHadronAnalysis.clone(
+                                                                 cutMultMin = cms.double(0),
+                                                                 cutMultMax = cms.double(39)
+                                                                 )
+
+
+process.Mult010 = cms.Path(process.hltSingleTrigger *
                            process.collisionEventSelection *
-                           process.TriHadronAnalysisMult100
+                           process.TriHadronAnalysisMult0_10
                            )
 
-process.Mult130 = cms.Path(process.hltSingleTrigger *
+process.Mult1020 = cms.Path(process.hltSingleTrigger *
                            process.collisionEventSelection *
-                           process.TriHadronAnalysisMult130
+                           process.TriHadronAnalysisMult10_20
                            )
 
-process.Mult160 = cms.Path(process.hltSingleTrigger *
+process.Mult2030 = cms.Path(process.hltSingleTrigger *
                            process.collisionEventSelection *
-                           process.TriHadronAnalysisMult160
+                           process.TriHadronAnalysisMult20_30
                            )
 
-process.Mult190 = cms.Path(process.hltSingleTrigger *
+process.Mult3040 = cms.Path(process.hltSingleTrigger *
                            process.collisionEventSelection *
-                           process.TriHadronAnalysisMult190
+                           process.TriHadronAnalysisMult30_40
                            )
 
-process.schedule = cms.Schedule(process.Mult100,process.Mult130,process.Mult160,process.Mult190)
+process.Mult4050 = cms.Path(process.hltSingleTrigger *
+                           process.collisionEventSelection *
+                           process.TriHadronAnalysisMult40_50
+                           )
+
+process.Mult5060 = cms.Path(process.hltSingleTrigger *
+                           process.collisionEventSelection *
+                           process.TriHadronAnalysisMult50_60
+                           )
+
+process.Mult6070 = cms.Path(process.hltSingleTrigger *
+                            process.collisionEventSelection *
+                            process.TriHadronAnalysisMult60_70
+                            )
+
+process.Mult7080 = cms.Path(process.hltSingleTrigger *
+                            process.collisionEventSelection *
+                            process.TriHadronAnalysisMult70_80
+                            )
+
+process.MultMinBias = cms.Path(process.hltSingleTrigger *
+                            process.collisionEventSelection *
+                            process.TriHadronAnalysisMultMinBias
+                            )
+
+process.schedule = cms.Schedule(process.Mult,process.Mult130,process.Mult160,process.Mult190)
 
 process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring(
