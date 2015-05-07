@@ -169,7 +169,9 @@ process.MultMinBias = cms.Path(process.hltSingleTrigger *
                             process.TriHadronAnalysisMultMinBias
                             )
 
-process.schedule = cms.Schedule(process.Mult,process.Mult130,process.Mult160,process.Mult190)
+process.schedule = cms.Schedule(process.Mult010,process.Mult1020,process.Mult2030,process.Mult3040,
+                                process.Mult4050,process.Mult5060,process.Mult6070,process.Mult7080,
+                                process.MultMinBias)
 
 process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring(
