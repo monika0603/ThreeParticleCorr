@@ -594,7 +594,6 @@ TriHadronAnalyzer::endJob()
                     double zvtx_f = (zvtxVect)[nass_f];
                     int iBin_f = corrFactors_->FindBin(eta_ass1, zvtx_f);
                     double eff_f = corrFactors_->GetBinContent(iBin_f);
-                    cout<<zvtx_f<<'\t'<<eta_ass1<<'\t'<<eff_f<<endl;
                     
                     for(int nass_s=0; nass_s<nMult_ass2; ++nass_s)
                     {
