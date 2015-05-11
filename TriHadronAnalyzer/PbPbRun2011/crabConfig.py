@@ -11,6 +11,7 @@ config.section_('JobType')
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'trihadronanalyzerPbPb_cfg.py'
 config.JobType.outputFiles = ['TriHadronFirstAttempt.root']
+config.JobType.inputFiles = ['CorrectionFactors_PbPb.root']
 
 config.section_('Data')
 config.Data.inputDataset = '/HIMinBiasUPC/HIRun2011-14Mar2014-v2/RECO'
