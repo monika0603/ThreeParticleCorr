@@ -77,6 +77,7 @@ private:
     
     TH1F* events_;
     TH1F* vertices_;
+    TH2F* corrFactors_;
     
     int nevt_;
     int ntrack_;
@@ -350,6 +351,8 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             double phi_ass_f = pvector_ass1.Phi();
             double eta_ass_f = pvector_ass1.Eta();
             int ass_fEta_ = getEtaRegion(eta_ass_f);
+            double eff_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
+            cout<<"Efficiency of first associated particle = "<<eff_f<<endl;
             
             for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
             {
@@ -358,6 +361,8 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 double phi_ass_s = pvector_ass2.Phi();
                 double eta_ass_s = pvector_ass2.Eta();
                 int ass_sEta_ = getEtaRegion(eta_ass_s);
+                double eff_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
+                cout<<"Efficiency of second associated particle = "<<eff_s<<endl;
                 
                 double deltaPhi1 = phi_ass_f - phi_trg;
                 double deltaPhi2 = phi_ass_s - phi_trg;
@@ -526,6 +531,8 @@ TriHadronAnalyzer::getEtaRegion(const double eta)
 void
 TriHadronAnalyzer::beginJob()
 {
+    TFile * file = new TFile("/home/sharmam/CMSSW_5_3_22/src/ThreeParticleCorr/TriHadronAnalyzer/PbPbRun2011/CorrectionFactors_PbPb.root","r");
+    corrFactors_ = (TH2F*)file->Get("hVzEtaEff_cent");
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
