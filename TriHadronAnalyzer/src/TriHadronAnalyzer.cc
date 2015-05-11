@@ -352,9 +352,8 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             double eta_ass_f = pvector_ass1.Eta();
             int ass_fEta_ = getEtaRegion(eta_ass_f);
             
-            double iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
+            int iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
             double eff_f = corrFactors_->GetBinContent(iBin_f);
-            cout<<"Efficiency of first associated particle = "<<eff_f<<endl;
             
             for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
             {
@@ -364,10 +363,8 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 double eta_ass_s = pvector_ass2.Eta();
                 int ass_sEta_ = getEtaRegion(eta_ass_s);
                 
-                double iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
+                int iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
                 double eff_s = corrFactors_->GetBinContent(iBin_s);
-                cout<<eta_ass_f<<'\t'<<eta_ass_s<<'\t'<<vsorted[0].z()<<endl;
-                cout<<"Efficiency of second associated particle = "<<eff_s<<endl;
                 
                 double deltaPhi1 = phi_ass_f - phi_trg;
                 double deltaPhi2 = phi_ass_s - phi_trg;
@@ -383,16 +380,16 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
             
                 if(ass_fEta_ == 0 && ass_sEta_==0) {
-                    hSignal_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                    hSignal_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
                 
                 if(ass_fEta_ == 1 && ass_sEta_==1) {
-                    hSignal_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                    hSignal_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
                 
                 if(ass_fEta_ == 0 && ass_sEta_==1) {
-                    hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                    hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
                 
                 if(ass_fEta_ == 1 && ass_sEta_==0) {
-                    hSignal_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg); }
+                    hSignal_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
                 
             } //Loop over associated particles
         } //Loop over associated particles
