@@ -362,6 +362,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 double eta_ass_s = pvector_ass2.Eta();
                 int ass_sEta_ = getEtaRegion(eta_ass_s);
                 double eff_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
+                cout<<eta_ass_f<<'\t'<<eta_ass_s<<'\t'<<vsorted[0].z()<<endl;
                 cout<<"Efficiency of second associated particle = "<<eff_s<<endl;
                 
                 double deltaPhi1 = phi_ass_f - phi_trg;
