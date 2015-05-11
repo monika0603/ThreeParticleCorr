@@ -351,7 +351,9 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             double phi_ass_f = pvector_ass1.Phi();
             double eta_ass_f = pvector_ass1.Eta();
             int ass_fEta_ = getEtaRegion(eta_ass_f);
-            double eff_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
+            
+            double iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
+            double eff_f = corrFactors_->GetBinContent(iBin_f);
             cout<<"Efficiency of first associated particle = "<<eff_f<<endl;
             
             for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
@@ -361,7 +363,9 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 double phi_ass_s = pvector_ass2.Phi();
                 double eta_ass_s = pvector_ass2.Eta();
                 int ass_sEta_ = getEtaRegion(eta_ass_s);
-                double eff_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
+                
+                double iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
+                double eff_s = corrFactors_->GetBinContent(iBin_s);
                 cout<<eta_ass_f<<'\t'<<eta_ass_s<<'\t'<<vsorted[0].z()<<endl;
                 cout<<"Efficiency of second associated particle = "<<eff_s<<endl;
                 
