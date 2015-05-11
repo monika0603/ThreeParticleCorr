@@ -591,6 +591,11 @@ TriHadronAnalyzer::endJob()
                     double eta_ass1 = pvectorTmp_ass1.Eta();
                     int ass_fEta_ = getEtaRegion(eta_ass1);
                     
+                    double zvtx_f = (zvtxVect)[nass_f];
+                    int iBin_f = corrFactors_->FindBin(eta_ass1, zvtx_f);
+                    double eff_f = corrFactors_->GetBinContent(iBin_f);
+                    cout<<zvtx_f<<'\t'<<eta_ass1<<'\t'<<eff_f<<endl;
+                    
                     for(int nass_s=0; nass_s<nMult_ass2; ++nass_s)
                     {
                         if( nass_f == nass_s ) continue;
@@ -598,6 +603,10 @@ TriHadronAnalyzer::endJob()
                         double phi_ass2 = pvectorTmp_ass2.Phi();
                         double eta_ass2 = pvectorTmp_ass2.Eta();
                         int ass_sEta_ = getEtaRegion(eta_ass2);
+                        
+                        double zvtx_s = (zvtxVect)[nass_s];
+                        int iBin_s = corrFactors_->FindBin(eta_ass2, zvtx_s);
+                        double eff_s = corrFactors_->GetBinContent(iBin_s);
                         
                        // double deltaEta = eta_ass - eta_trg;
                         double deltaPhi1 = phi_ass1 - phi_trg;
@@ -613,16 +622,16 @@ TriHadronAnalyzer::endJob()
                         if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
                         
                         if(ass_fEta_ == 0 && ass_sEta_==0) {
-                            hBackground_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1); }
+                            hBackground_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
                         
                         if(ass_fEta_ == 1 && ass_sEta_==1) {
-                            hBackground_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1); }
+                            hBackground_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
                         
                         if(ass_fEta_ == 0 && ass_sEta_==1) {
-                            hBackground_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1); }
+                            hBackground_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
                         
                         if(ass_fEta_ == 1 && ass_sEta_==0) {
-                            hBackground_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1); }
+                            hBackground_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
                     
                     }
                 }
