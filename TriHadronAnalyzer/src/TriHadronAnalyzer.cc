@@ -343,7 +343,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         int nevt_trg = gRandom->Integer(nMultTrg);
         TVector3 ivector_trg = (pVect_trg)[nevt_trg];
         double phi_RndmTrg = ivector_trg.Phi();
-        cout<<"Azimuthal angle of randomized trigger particle = "<<phi_RndmTrg<<endl;
+     //   cout<<"Azimuthal angle of randomized trigger particle = "<<phi_RndmTrg<<endl;
         
     }
     
@@ -358,7 +358,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     {
         TVector3 pvector_trg = (pVect_trg)[ntrg];
         double phi_trg = pvector_trg.Phi();
-        cout<<"Azimuthal angle of (NOT) randomized trigger particle = "<<phi_trg<<endl;
       // double eta_trg = pvector_trg.Eta();
       // int trgEta_ = getEtaRegion(eta_trg);
         
