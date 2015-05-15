@@ -338,14 +338,64 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     int nMultAsso1 = (int)pVect_ass1.size();
     int nMultAsso2 = (int)pVect_ass2.size();
     
-  /*  for(int itrg=0; itrg<nMultTrg; ++itrg)
-    {
-        int nevt_trg = gRandom->Integer(nMultTrg);
-        TVector3 ivector_trg = (pVect_trg)[nevt_trg];
-        double phi_RndmTrg = ivector_trg.Phi();
-     //   cout<<"Azimuthal angle of randomized trigger particle = "<<phi_RndmTrg<<endl;
-        
-    }*/
+    for(int itrg=0; itrg<nMultTrg; ++itrg)
+        {
+            int nevt_trg = gRandom->Integer(nMultTrg);
+            TVector3 ivector_trg = (pVect_trg)[nevt_trg];
+            double phi_RndmTrg = ivector_trg.Phi();
+            
+            for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
+            {
+                TVector3 pvector_ass1 = (pVect_ass1)[nass_f];
+                double phi_ass_f = pvector_ass1.Phi();
+                double eta_ass_f = pvector_ass1.Eta();
+                int ass_fEta_ = getEtaRegion(eta_ass_f);
+                
+                int iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
+                double eff_f = corrFactors_->GetBinContent(iBin_f);
+                cout<<"Efficiency number 1 = "<<eff_f<<endl;
+                
+                for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
+                {
+                    if(nass_s == nass_f) continue;
+                    TVector3 pvector_ass2 = (pVect_ass2)[nass_s];
+                    double phi_ass_s = pvector_ass2.Phi();
+                    double eta_ass_s = pvector_ass2.Eta();
+                    int ass_sEta_ = getEtaRegion(eta_ass_s);
+                    
+                    int iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
+                    double eff_s = corrFactors_->GetBinContent(iBin_s);
+                    cout<<"Efficiency number 2 = "<<eff_s<<endl;
+                    
+                    double deltaPhi1 = phi_ass_f - phi_RndmTrg;
+                    double deltaPhi2 = phi_ass_s - phi_RndmTrg;
+                    
+                    if(deltaPhi1 > pi_) deltaPhi1 = deltaPhi1 - 2*pi_;
+                    if(deltaPhi1 < -pi_) deltaPhi1 = deltaPhi1 + 2*pi_;
+                    if(deltaPhi1 > -pi_ && deltaPhi1 < -pi_/2.0) deltaPhi1 = deltaPhi1 + 2*pi_;
+                    
+                    if(deltaPhi2 > pi_) deltaPhi2 = deltaPhi2 - 2*pi_;
+                    if(deltaPhi2 < -pi_) deltaPhi2 = deltaPhi2 + 2*pi_;
+                    if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
+                    
+                    if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
+                    
+                    if(ass_fEta_ == 0 && ass_sEta_==0) {
+                        cout<<"My condition is satisfied; weight = "<<deltaPhi1<<'\t'<<deltaPhi2<<'\t'<<1.0/nMultTrg/eff_f/eff_s<<endl;
+                        hSignal_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
+                    
+                    if(ass_fEta_ == 1 && ass_sEta_==1) {
+                        hSignal_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
+                    
+                    if(ass_fEta_ == 0 && ass_sEta_==1) {
+                        hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
+                    
+                    if(ass_fEta_ == 1 && ass_sEta_==0) {
+                        hSignal_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
+                    
+                } //Loop over associated particles
+            } //Loop over associated particles
+        } //Loop over randomized particle
     
     
     
