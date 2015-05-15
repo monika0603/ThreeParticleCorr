@@ -339,68 +339,52 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     int nMultAsso2 = (int)pVect_ass2.size();
     
     for(int itrg=0; itrg<nMultTrg; ++itrg)
-        {
-            int nevt_trg = gRandom->Integer(nMultTrg);
-            TVector3 ivector_trg = (pVect_trg)[nevt_trg];
-            double phi_RndmTrg = ivector_trg.Phi();
+    {
+        int nevt_trg = gRandom->Integer(nMultTrg);
+        TVector3 ivector_trg = (pVect_trg)[nevt_trg];
+        double phi_RndmTrg = ivector_trg.Phi();
             
-            for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
+        for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
+        {
+            TVector3 pvector_ass1 = (pVect_ass1)[nass_f];
+            double phi_ass_f = pvector_ass1.Phi();
+            double eta_ass_f = pvector_ass1.Eta();
+            int ass_fEta_ = getEtaRegion(eta_ass_f);
+                
+            int iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
+            double eff_f = corrFactors_->GetBinContent(iBin_f);
+            eff_f = 1.0;
+            
+            for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
             {
-                TVector3 pvector_ass1 = (pVect_ass1)[nass_f];
-                double phi_ass_f = pvector_ass1.Phi();
-                double eta_ass_f = pvector_ass1.Eta();
-                int ass_fEta_ = getEtaRegion(eta_ass_f);
+                if(nass_s == nass_f) continue;
+                TVector3 pvector_ass2 = (pVect_ass2)[nass_s];
+                double phi_ass_s = pvector_ass2.Phi();
+                double eta_ass_s = pvector_ass2.Eta();
+                int ass_sEta_ = getEtaRegion(eta_ass_s);
+                    
+                int iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
+                double eff_s = corrFactors_->GetBinContent(iBin_s);
+                eff_s = 1.0;
                 
-                int iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
-                double eff_f = corrFactors_->GetBinContent(iBin_f);
-                cout<<"Efficiency number 1 = "<<eff_f<<endl;
+                double deltaPhi1 = phi_ass_f - phi_RndmTrg;
+                double deltaPhi2 = phi_ass_s - phi_RndmTrg;
                 
-                for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
-                {
-                    if(nass_s == nass_f) continue;
-                    TVector3 pvector_ass2 = (pVect_ass2)[nass_s];
-                    double phi_ass_s = pvector_ass2.Phi();
-                    double eta_ass_s = pvector_ass2.Eta();
-                    int ass_sEta_ = getEtaRegion(eta_ass_s);
+                if(deltaPhi1 > pi_) deltaPhi1 = deltaPhi1 - 2*pi_;
+                if(deltaPhi1 < -pi_) deltaPhi1 = deltaPhi1 + 2*pi_;
+                if(deltaPhi1 > -pi_ && deltaPhi1 < -pi_/2.0) deltaPhi1 = deltaPhi1 + 2*pi_;
                     
-                    int iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
-                    double eff_s = corrFactors_->GetBinContent(iBin_s);
-                    cout<<"Efficiency number 2 = "<<eff_s<<endl;
+                if(deltaPhi2 > pi_) deltaPhi2 = deltaPhi2 - 2*pi_;
+                if(deltaPhi2 < -pi_) deltaPhi2 = deltaPhi2 + 2*pi_;
+                if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
                     
-                    double deltaPhi1 = phi_ass_f - phi_RndmTrg;
-                    double deltaPhi2 = phi_ass_s - phi_RndmTrg;
-                    
-                    if(deltaPhi1 > pi_) deltaPhi1 = deltaPhi1 - 2*pi_;
-                    if(deltaPhi1 < -pi_) deltaPhi1 = deltaPhi1 + 2*pi_;
-                    if(deltaPhi1 > -pi_ && deltaPhi1 < -pi_/2.0) deltaPhi1 = deltaPhi1 + 2*pi_;
-                    
-                    if(deltaPhi2 > pi_) deltaPhi2 = deltaPhi2 - 2*pi_;
-                    if(deltaPhi2 < -pi_) deltaPhi2 = deltaPhi2 + 2*pi_;
-                    if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
-                    
-                    if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
-                    
-                    if(ass_fEta_ == 0 && ass_sEta_==0) {
-                        cout<<"My condition is satisfied; weight = "<<deltaPhi1<<'\t'<<deltaPhi2<<'\t'<<1.0/nMultTrg/eff_f/eff_s<<endl;
-                        hSignal_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
-                    
-                    if(ass_fEta_ == 1 && ass_sEta_==1) {
-                        hSignal_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
-                    
-                    if(ass_fEta_ == 0 && ass_sEta_==1) {
-                        hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
-                    
-                    if(ass_fEta_ == 1 && ass_sEta_==0) {
-                        hSignal_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
-                    
-                } //Loop over associated particles
+                if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
+                
+                if(ass_fEta_ == 0 && ass_sEta_==0) {
+                    hSignal_["combBkg"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);}
             } //Loop over associated particles
-        } //Loop over randomized particle
-    
-    
-    
-    
-    
+        } //Loop over associated particles
+    } //Loop over randomized trigger particle
     
     /////// Calculating the signal for tri-hadron correlations ////////////////
     
@@ -420,6 +404,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             
             int iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
             double eff_f = corrFactors_->GetBinContent(iBin_f);
+            eff_f = 1.0;
             
             for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
             {
@@ -431,6 +416,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 
                 int iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
                 double eff_s = corrFactors_->GetBinContent(iBin_s);
+                eff_s = 1.0;
                 
                 double deltaPhi1 = phi_ass_f - phi_trg;
                 double deltaPhi2 = phi_ass_s - phi_trg;
@@ -477,7 +463,7 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
     vertices_ = fs->make<TH1F>("vertices","",1,0,1);
     
     evtPerf_["Ntrk"] = fs->make<TH1F>("evtNtrk","Tracks per event",100,0,400);
-    evtPerf_["NHPtrk"] = fs->make<TH1F>("evtHPNtrk","High purity tracks per event",100,0,400);
+    evtPerf_["NHPtrk"] = fs->make<TH1F>("evtHPNtrk","High purity tracks per event",100,0,10000);
     evtPerf_["Nvtx"] = fs->make<TH1F>("evtNvtx","Primary Vertices per event",10,0,10);
     evtPerf_["NvtxLumi"] = fs->make<TH1F>("evtNvtxLumi","Primary Vertices by Lumi",200,0,2000);
     evtPerf_["Lumi"] = fs->make<TH1F>("evtLumi","Events by Lumi",200,0,2000);
@@ -525,6 +511,7 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
     }
     
     hSignal_["0"] = fs->make<TH2D>("hSignal0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["combBkg"] = fs->make<TH2D>("hSignal_combBkg", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hSignal_["1"] = fs->make<TH2D>("hSignal1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hSignal_["af0_as1"] = fs->make<TH2D>("hSignal_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hSignal_["af1_as0"] = fs->make<TH2D>("hSignal_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
@@ -660,6 +647,7 @@ TriHadronAnalyzer::endJob()
                     double zvtx_f = (zvtxVect)[nass_f];
                     int iBin_f = corrFactors_->FindBin(eta_ass1, zvtx_f);
                     double eff_f = corrFactors_->GetBinContent(iBin_f);
+                    eff_f = 1.0;
                     
                     for(int nass_s=0; nass_s<nMult_ass2; ++nass_s)
                     {
@@ -672,6 +660,7 @@ TriHadronAnalyzer::endJob()
                         double zvtx_s = (zvtxVect)[nass_s];
                         int iBin_s = corrFactors_->FindBin(eta_ass2, zvtx_s);
                         double eff_s = corrFactors_->GetBinContent(iBin_s);
+                        eff_s = 1.0;
                         
                        // double deltaEta = eta_ass - eta_trg;
                         double deltaPhi1 = phi_ass1 - phi_trg;
@@ -703,8 +692,6 @@ TriHadronAnalyzer::endJob()
             }
         }
     }
-    
-    
 }
 
 //define this as a plug-in
