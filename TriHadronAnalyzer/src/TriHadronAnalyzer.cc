@@ -338,14 +338,14 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     int nMultAsso1 = (int)pVect_ass1.size();
     int nMultAsso2 = (int)pVect_ass2.size();
     
-    for(int itrg=0; itrg<nMultTrg; ++itrg)
+  /*  for(int itrg=0; itrg<nMultTrg; ++itrg)
     {
         int nevt_trg = gRandom->Integer(nMultTrg);
         TVector3 ivector_trg = (pVect_trg)[nevt_trg];
         double phi_RndmTrg = ivector_trg.Phi();
      //   cout<<"Azimuthal angle of randomized trigger particle = "<<phi_RndmTrg<<endl;
         
-    }
+    }*/
     
     
     
