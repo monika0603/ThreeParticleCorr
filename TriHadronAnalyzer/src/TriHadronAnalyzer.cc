@@ -339,7 +339,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     int nMultAsso2 = (int)pVect_ass2.size();
     
     double phi_RndmTrg = gRandom->Uniform(-pi_, pi_);
-    cout<<"I have the random trigger"<<phi_RndmTrg<<endl;
             
     for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
     {
@@ -367,54 +366,42 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             double deltaPhi_2p = phi_ass_s - phi_ass_f;
             double deltaPhi1 = phi_ass_f - phi_RndmTrg;
             double deltaPhi2 = phi_ass_s - phi_RndmTrg;
-            cout<<"Delta phi 1 = "<<deltaPhi1<<'\t'<<"Delta phi 2 = "<<deltaPhi2<<endl;
             
             if(deltaPhi_2p > pi_) deltaPhi_2p = deltaPhi_2p - 2*pi_;
             if(deltaPhi_2p < -pi_) deltaPhi_2p = deltaPhi_2p + 2*pi_;
             if(deltaPhi_2p > -pi_ && deltaPhi_2p < -pi_/2.0) deltaPhi_2p = deltaPhi_2p + 2*pi_;
-            cout<<"******* -1- "<<endl;
                 
             if(deltaPhi1 > pi_) deltaPhi1 = deltaPhi1 - 2*pi_;
             if(deltaPhi1 < -pi_) deltaPhi1 = deltaPhi1 + 2*pi_;
             if(deltaPhi1 > -pi_ && deltaPhi1 < -pi_/2.0) deltaPhi1 = deltaPhi1 + 2*pi_;
-            cout<<"******* -2- "<<endl;
                     
             if(deltaPhi2 > pi_) deltaPhi2 = deltaPhi2 - 2*pi_;
             if(deltaPhi2 < -pi_) deltaPhi2 = deltaPhi2 + 2*pi_;
             if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
-            cout<<"******* -3- "<<endl;
                     
             if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
             
             double sigma = (deltaPhi1 + deltaPhi2)/2.0 - pi_;
             double delta = (deltaPhi1 - deltaPhi2)/2.0;
-            
-            cout<<"Eta of associated particle one and two = "<<ass_fEta_<<'\t'<<ass_sEta_<<endl;
                 
             if(ass_fEta_ == 0 && ass_sEta_== 0) {
-                cout<<"******* -4- "<<endl;
                 hSignal_["combBkg0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
-                
                 hSignal_["combBkg_SD0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
-                cout<<"Done -I-"<<endl;
             }
             
             if(ass_fEta_ == 1 && ass_sEta_== 1) {
                 hSignal_["combBkg1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
                 hSignal_["combBkg_SD1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
-                cout<<"Done -II-"<<endl;
             }
             
             if(ass_fEta_ == 0 && ass_sEta_== 1) {
                 hSignal_["combBkg_af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
                 hSignal_["combBkg_SD0_af0_as1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
-                cout<<"Done -III-"<<endl;
             }
             
             if(ass_fEta_ == 1 && ass_sEta_== 0) {
                 hSignal_["combBkg_af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
                 hSignal_["combBkg_SD0_af1_as0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
-                cout<<"Done -III-"<<endl;
             }
         } //Loop over associated particles
     } //Loop over associated particles
