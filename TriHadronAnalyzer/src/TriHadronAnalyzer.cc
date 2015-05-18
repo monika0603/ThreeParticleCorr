@@ -338,53 +338,73 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     int nMultAsso1 = (int)pVect_ass1.size();
     int nMultAsso2 = (int)pVect_ass2.size();
     
-    for(int itrg=0; itrg<nMultTrg; ++itrg)
+    double phi_RndmTrg = gRandom->Uniform(-pi_, pi_);
+            
+    for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
     {
-        int nevt_trg = gRandom->Integer(nMultTrg);
-        TVector3 ivector_trg = (pVect_trg)[nevt_trg];
-        double phi_RndmTrg = ivector_trg.Phi();
+        TVector3 pvector_ass1 = (pVect_ass1)[nass_f];
+        double phi_ass_f = pvector_ass1.Phi();
+        double eta_ass_f = pvector_ass1.Eta();
+        int ass_fEta_ = getEtaRegion(eta_ass_f);
+                
+        int iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
+        double eff_f = corrFactors_->GetBinContent(iBin_f);
+        eff_f = 1.0;
             
-        for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
+        for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
         {
-            TVector3 pvector_ass1 = (pVect_ass1)[nass_f];
-            double phi_ass_f = pvector_ass1.Phi();
-            double eta_ass_f = pvector_ass1.Eta();
-            int ass_fEta_ = getEtaRegion(eta_ass_f);
-                
-            int iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
-            double eff_f = corrFactors_->GetBinContent(iBin_f);
-            eff_f = 1.0;
+            if(nass_s == nass_f) continue;
+            TVector3 pvector_ass2 = (pVect_ass2)[nass_s];
+            double phi_ass_s = pvector_ass2.Phi();
+            double eta_ass_s = pvector_ass2.Eta();
+            int ass_sEta_ = getEtaRegion(eta_ass_s);
+                    
+            int iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
+            double eff_s = corrFactors_->GetBinContent(iBin_s);
+            eff_s = 1.0;
             
-            for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
-            {
-                if(nass_s == nass_f) continue;
-                TVector3 pvector_ass2 = (pVect_ass2)[nass_s];
-                double phi_ass_s = pvector_ass2.Phi();
-                double eta_ass_s = pvector_ass2.Eta();
-                int ass_sEta_ = getEtaRegion(eta_ass_s);
-                    
-                int iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
-                double eff_s = corrFactors_->GetBinContent(iBin_s);
-                eff_s = 1.0;
+            double deltaPhi_2p = phi_ass_s - phi_ass_f;
+            double deltaPhi1 = phi_ass_f - phi_RndmTrg;
+            double deltaPhi2 = phi_ass_s - phi_RndmTrg;
+            
+            if(deltaPhi_2p > pi_) deltaPhi_2p = deltaPhi_2p - 2*pi_;
+            if(deltaPhi_2p < -pi_) deltaPhi_2p = deltaPhi_2p + 2*pi_;
+            if(deltaPhi_2p > -pi_ && deltaPhi_2p < -pi_/2.0) deltaPhi_2p = deltaPhi_2p + 2*pi_;
                 
-                double deltaPhi1 = phi_ass_f - phi_RndmTrg;
-                double deltaPhi2 = phi_ass_s - phi_RndmTrg;
-                
-                if(deltaPhi1 > pi_) deltaPhi1 = deltaPhi1 - 2*pi_;
-                if(deltaPhi1 < -pi_) deltaPhi1 = deltaPhi1 + 2*pi_;
-                if(deltaPhi1 > -pi_ && deltaPhi1 < -pi_/2.0) deltaPhi1 = deltaPhi1 + 2*pi_;
+            if(deltaPhi1 > pi_) deltaPhi1 = deltaPhi1 - 2*pi_;
+            if(deltaPhi1 < -pi_) deltaPhi1 = deltaPhi1 + 2*pi_;
+            if(deltaPhi1 > -pi_ && deltaPhi1 < -pi_/2.0) deltaPhi1 = deltaPhi1 + 2*pi_;
                     
-                if(deltaPhi2 > pi_) deltaPhi2 = deltaPhi2 - 2*pi_;
-                if(deltaPhi2 < -pi_) deltaPhi2 = deltaPhi2 + 2*pi_;
-                if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
+            if(deltaPhi2 > pi_) deltaPhi2 = deltaPhi2 - 2*pi_;
+            if(deltaPhi2 < -pi_) deltaPhi2 = deltaPhi2 + 2*pi_;
+            if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
                     
-                if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
+            if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
+            
+            double sigma = (deltaPhi1 + deltaPhi2)/2.0 - pi_;
+            double delta = (deltaPhi1 - deltaPhi2)/2.0;
                 
-                if(ass_fEta_ == 0 && ass_sEta_==0) {
-                    hSignal_["combBkg"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);}
-            } //Loop over associated particles
+            if(ass_fEta_ == 0 && ass_sEta_== 0) {
+                hSignal_["combBkg0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+                hSignal_["combBkg_SD0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+            }
+            
+            if(ass_fEta_ == 1 && ass_sEta_== 1) {
+                hSignal_["combBkg1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+                hSignal_["combBkg_SD1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+            }
+            
+            if(ass_fEta_ == 0 && ass_sEta_== 1) {
+                hSignal_["combBkg_af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+                hSignal_["combBkg_SD0_af0_as1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+            }
+            
+            if(ass_fEta_ == 1 && ass_sEta_== 0) {
+                hSignal_["combBkg_af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+                hSignal_["combBkg_SD0_af1_as0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+            }
         } //Loop over associated particles
-    } //Loop over randomized trigger particle
+    } //Loop over associated particles
     
     /////// Calculating the signal for tri-hadron correlations ////////////////
     
@@ -393,7 +413,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         TVector3 pvector_trg = (pVect_trg)[ntrg];
         double phi_trg = pvector_trg.Phi();
       // double eta_trg = pvector_trg.Eta();
-      // int trgEta_ = getEtaRegion(eta_trg);
+      // int trgEta_ = getEtaRegion(eta_trg); Because trigger particle can come from anywhere
         
         for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
         {
@@ -430,19 +450,29 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
             
                 if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
+                
+                double sigma = (deltaPhi1 + deltaPhi2)/2.0 - pi_;
+                double delta = (deltaPhi1 - deltaPhi2)/2.0;
             
                 if(ass_fEta_ == 0 && ass_sEta_==0) {
-                    hSignal_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
+                    hSignal_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+                    hSignal_["SD0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+                }
                 
                 if(ass_fEta_ == 1 && ass_sEta_==1) {
-                    hSignal_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
+                    hSignal_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+                    hSignal_["SD1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+                }
                 
                 if(ass_fEta_ == 0 && ass_sEta_==1) {
-                    hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
+                    hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+                    hSignal_["SD_af0_as1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+                }
                 
                 if(ass_fEta_ == 1 && ass_sEta_==0) {
-                    hSignal_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s); }
-                
+                    hSignal_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+                    hSignal_["SD_af1_as0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+                }
             } //Loop over associated particles
         } //Loop over associated particles
     } //Loop over trigger particles
@@ -511,10 +541,19 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
     }
     
     hSignal_["0"] = fs->make<TH2D>("hSignal0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
-    hSignal_["combBkg"] = fs->make<TH2D>("hSignal_combBkg", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hSignal_["1"] = fs->make<TH2D>("hSignal1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hSignal_["af0_as1"] = fs->make<TH2D>("hSignal_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hSignal_["af1_as0"] = fs->make<TH2D>("hSignal_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    
+    hSignal_["SD0"] = fs->make<TH2D>("hSignal_SD0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["SD1"] = fs->make<TH2D>("hSignal_SD1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["SD_af0_as1"] = fs->make<TH2D>("hSignal_SD_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["SD_af1_as0"] = fs->make<TH2D>("hSignal_SD_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    
+    hSignal_["combBkg0"] = fs->make<TH2D>("hSignal_combBkg0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["combBkg_SD0"] = fs->make<TH2D>("hSignal_combBkg_SD0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["combBkg_SD0_af0_as1"] = fs->make<TH2D>("hSignal_combBkg_SD0_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["combBkg_SD0_af1_as0"] = fs->make<TH2D>("hSignal_combBkg_SD0_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     
     hBackground_["0"] = fs->make<TH2D>("hBackground0", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hBackground_["1"] = fs->make<TH2D>("hBackground1", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
