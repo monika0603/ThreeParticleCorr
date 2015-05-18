@@ -564,7 +564,12 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
     hSignal_["SD_af1_as0"] = fs->make<TH2D>("hSignal_SD_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     
     hSignal_["combBkg0"] = fs->make<TH2D>("hSignal_combBkg0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["combBkg1"] = fs->make<TH2D>("hSignal_combBkg1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["combBkg_af0_as1"] = fs->make<TH2D>("hSignal_combBkg_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["combBkg_af1_as0"] = fs->make<TH2D>("hSignal_combBkg_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    
     hSignal_["combBkg_SD0"] = fs->make<TH2D>("hSignal_combBkg_SD0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["combBkg_SD1"] = fs->make<TH2D>("hSignal_combBkg_SD1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hSignal_["combBkg_SD0_af0_as1"] = fs->make<TH2D>("hSignal_combBkg_SD0_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hSignal_["combBkg_SD0_af1_as0"] = fs->make<TH2D>("hSignal_combBkg_SD0_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     
