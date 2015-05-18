@@ -367,6 +367,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             double deltaPhi_2p = phi_ass_s - phi_ass_f;
             double deltaPhi1 = phi_ass_f - phi_RndmTrg;
             double deltaPhi2 = phi_ass_s - phi_RndmTrg;
+            cout<<"Delta phi 1 = "<<deltaPhi1<<'\t'<<"Delta phi 2 = "<<deltaPhi2<<endl;
             
             if(deltaPhi_2p > pi_) deltaPhi_2p = deltaPhi_2p - 2*pi_;
             if(deltaPhi_2p < -pi_) deltaPhi_2p = deltaPhi_2p + 2*pi_;
