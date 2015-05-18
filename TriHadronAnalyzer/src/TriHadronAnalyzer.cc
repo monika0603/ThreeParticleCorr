@@ -372,14 +372,17 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             if(deltaPhi_2p > pi_) deltaPhi_2p = deltaPhi_2p - 2*pi_;
             if(deltaPhi_2p < -pi_) deltaPhi_2p = deltaPhi_2p + 2*pi_;
             if(deltaPhi_2p > -pi_ && deltaPhi_2p < -pi_/2.0) deltaPhi_2p = deltaPhi_2p + 2*pi_;
+            cout<<"******* -1- "<<endl;
                 
             if(deltaPhi1 > pi_) deltaPhi1 = deltaPhi1 - 2*pi_;
             if(deltaPhi1 < -pi_) deltaPhi1 = deltaPhi1 + 2*pi_;
             if(deltaPhi1 > -pi_ && deltaPhi1 < -pi_/2.0) deltaPhi1 = deltaPhi1 + 2*pi_;
+            cout<<"******* -2- "<<endl;
                     
             if(deltaPhi2 > pi_) deltaPhi2 = deltaPhi2 - 2*pi_;
             if(deltaPhi2 < -pi_) deltaPhi2 = deltaPhi2 + 2*pi_;
             if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
+            cout<<"******* -3- "<<endl;
                     
             if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
             
@@ -388,6 +391,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 
             if(ass_fEta_ == 0 && ass_sEta_== 0) {
                 hSignal_["combBkg0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+                cout<<"******* -4- "<<endl;
                 hSignal_["combBkg_SD0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
                 cout<<"Done -I-"<<endl;
             }
