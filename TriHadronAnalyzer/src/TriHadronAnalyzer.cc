@@ -390,8 +390,9 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             double delta = (deltaPhi1 - deltaPhi2)/2.0;
                 
             if(ass_fEta_ == 0 && ass_sEta_== 0) {
-                hSignal_["combBkg0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
                 cout<<"******* -4- "<<endl;
+                hSignal_["combBkg0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+                
                 hSignal_["combBkg_SD0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
                 cout<<"Done -I-"<<endl;
             }
