@@ -388,6 +388,8 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             
             double sigma = (deltaPhi1 + deltaPhi2)/2.0 - pi_;
             double delta = (deltaPhi1 - deltaPhi2)/2.0;
+            
+            cout<<"Eta of associated particle one and two = "<<ass_fEta_<<'\t'<<ass_sEta_<<endl;
                 
             if(ass_fEta_ == 0 && ass_sEta_== 0) {
                 cout<<"******* -4- "<<endl;
