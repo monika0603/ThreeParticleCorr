@@ -385,24 +385,24 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             double delta = (deltaPhi1 - deltaPhi2)/2.0;
                 
             if(ass_fEta_ == 0 && ass_sEta_== 0) {
-                hSignal_["combBkg0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
-                hSignal_["combBkg_SD0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+                hSignal_["combBkg0"]->Fill(deltaPhi1,deltaPhi2,1.0/eff_f/eff_s);
+                hSignal_["combBkg_SD0"]->Fill(sigma,delta,1.0/eff_f/eff_s);
             }
             
-            if(ass_fEta_ == 1 && ass_sEta_== 1) {
+          /*  if(ass_fEta_ == 1 && ass_sEta_== 1) {
                 hSignal_["combBkg1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
                 hSignal_["combBkg_SD1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
-            }
+            }*/
             
             if(ass_fEta_ == 0 && ass_sEta_== 1) {
-                hSignal_["combBkg_af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
-                hSignal_["combBkg_SD0_af0_as1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+                hSignal_["combBkg_af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/eff_f/eff_s);
+              //  hSignal_["combBkg_SD0_af0_as1"]->Fill(sigma,delta,1.0/eff_f/eff_s);
             }
             
-            if(ass_fEta_ == 1 && ass_sEta_== 0) {
+          /*  if(ass_fEta_ == 1 && ass_sEta_== 0) {
                 hSignal_["combBkg_af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
                 hSignal_["combBkg_SD0_af1_as0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
-            }
+            }*/
         } //Loop over associated particles
     } //Loop over associated particles
     
@@ -459,20 +459,20 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                     hSignal_["SD0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
                 }
                 
-                if(ass_fEta_ == 1 && ass_sEta_==1) {
+              /*  if(ass_fEta_ == 1 && ass_sEta_==1) {
                     hSignal_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
                     hSignal_["SD1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
-                }
+                }*/
                 
                 if(ass_fEta_ == 0 && ass_sEta_==1) {
                     hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
                     hSignal_["SD_af0_as1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
                 }
                 
-                if(ass_fEta_ == 1 && ass_sEta_==0) {
+             /*   if(ass_fEta_ == 1 && ass_sEta_==0) {
                     hSignal_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
                     hSignal_["SD_af1_as0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
-                }
+                }*/
             } //Loop over associated particles
         } //Loop over associated particles
     } //Loop over trigger particles
