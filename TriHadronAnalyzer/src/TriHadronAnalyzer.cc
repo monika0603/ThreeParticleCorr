@@ -349,7 +349,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 
         int iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
         double eff_f = corrFactors_->GetBinContent(iBin_f);
-        eff_f = 1.0;
+      //  eff_f = 1.0;
             
         for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
         {
@@ -361,7 +361,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                     
             int iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
             double eff_s = corrFactors_->GetBinContent(iBin_s);
-            eff_s = 1.0;
+          //  eff_s = 1.0;
             
             double deltaPhi_2p = phi_ass_s - phi_ass_f;
             double deltaPhi1 = phi_ass_f - phi_RndmTrg;
@@ -393,6 +393,8 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 hSignal_["combBkg1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
                 hSignal_["combBkg_SD1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
             }*/
+            
+            cout<<eff_f<<eff_s<<"1.0/eff_f/eff_s = "<<1.0/eff_f/eff_s<<endl;
             
             if(ass_fEta_ == 0 && ass_sEta_== 1) {
                 hSignal_["combBkg_af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/eff_f/eff_s);
