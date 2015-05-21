@@ -394,8 +394,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 hSignal_["combBkg_SD1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
             }*/
             
-            cout<<eff_f<<eff_s<<"1.0/eff_f/eff_s = "<<1.0/eff_f/eff_s<<endl;
-            
             if(ass_fEta_ == 0 && ass_sEta_== 1) {
                 hSignal_["combBkg_af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/eff_f/eff_s);
               //  hSignal_["combBkg_SD0_af0_as1"]->Fill(sigma,delta,1.0/eff_f/eff_s);
@@ -557,10 +555,10 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
     hSignal_["combBkg_af0_as1"] = fs->make<TH2D>("hSignal_combBkg_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hSignal_["combBkg_af1_as0"] = fs->make<TH2D>("hSignal_combBkg_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     
-    hSignal_["combBkg_SD0"] = fs->make<TH2D>("hSignal_combBkg_SD0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
-    hSignal_["combBkg_SD1"] = fs->make<TH2D>("hSignal_combBkg_SD1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
-    hSignal_["combBkg_SD0_af0_as1"] = fs->make<TH2D>("hSignal_combBkg_SD0_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
-    hSignal_["combBkg_SD0_af1_as0"] = fs->make<TH2D>("hSignal_combBkg_SD0_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["combBkg_SD0"] = fs->make<TH2D>("hSignal_combBkg_SD0", "#Delta#phi;#Delta#phi", 96,-pi_,pi_,96,-pi_,pi_);
+    hSignal_["combBkg_SD1"] = fs->make<TH2D>("hSignal_combBkg_SD1", "#Delta#phi;#Delta#phi", 96,-pi_,pi_,96,-pi_,pi_);
+    hSignal_["combBkg_SD0_af0_as1"] = fs->make<TH2D>("hSignal_combBkg_SD0_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_,pi_,96,-pi_,pi_);
+    hSignal_["combBkg_SD0_af1_as0"] = fs->make<TH2D>("hSignal_combBkg_SD0_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_,pi_,96,-pi_,pi_);
     
     hBackground_["0"] = fs->make<TH2D>("hBackground0", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hBackground_["1"] = fs->make<TH2D>("hBackground1", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
