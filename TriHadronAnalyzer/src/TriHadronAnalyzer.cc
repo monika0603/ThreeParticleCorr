@@ -424,7 +424,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             
             int iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
             double eff_f = corrFactors_->GetBinContent(iBin_f);
-            eff_f = 1.0;
+         //   eff_f = 1.0;
             
             for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
             {
@@ -436,7 +436,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 
                 int iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
                 double eff_s = corrFactors_->GetBinContent(iBin_s);
-                eff_s = 1.0;
+             //   eff_s = 1.0;
                 
                 double deltaPhi1 = phi_ass_f - phi_trg;
                 double deltaPhi2 = phi_ass_s - phi_trg;
