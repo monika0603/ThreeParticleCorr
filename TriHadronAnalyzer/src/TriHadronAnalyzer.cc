@@ -466,7 +466,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 
                 if(ass_fEta_ == 0 && ass_sEta_==1) {
                     hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
-                    hSignal_["SD_af0_as1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+                 //   hSignal_["SD_af0_as1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
                 }
                 
              /*   if(ass_fEta_ == 1 && ass_sEta_==0) {
@@ -545,10 +545,10 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
     hSignal_["af0_as1"] = fs->make<TH2D>("hSignal_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hSignal_["af1_as0"] = fs->make<TH2D>("hSignal_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     
-    hSignal_["SD0"] = fs->make<TH2D>("hSignal_SD0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
-    hSignal_["SD1"] = fs->make<TH2D>("hSignal_SD1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
-    hSignal_["SD_af0_as1"] = fs->make<TH2D>("hSignal_SD_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
-    hSignal_["SD_af1_as0"] = fs->make<TH2D>("hSignal_SD_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hSignal_["SD0"] = fs->make<TH2D>("hSignal_SD0", "#Delta#phi;#Delta#phi", 96,-pi_,pi_,96,-pi_,pi_);
+    hSignal_["SD1"] = fs->make<TH2D>("hSignal_SD1", "#Delta#phi;#Delta#phi", 96,-pi_,pi_,96,-pi_,pi_);
+    hSignal_["SD_af0_as1"] = fs->make<TH2D>("hSignal_SD_af0_as1", "#Delta#phi;#Delta#phi", 96,-pi_,pi_,96,-pi_,pi_);
+    hSignal_["SD_af1_as0"] = fs->make<TH2D>("hSignal_SD_af1_as0", "#Delta#phi;#Delta#phi", 96,-pi_,pi_,96,-pi_,pi_);
     
     hSignal_["combBkg0"] = fs->make<TH2D>("hSignal_combBkg0", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hSignal_["combBkg1"] = fs->make<TH2D>("hSignal_combBkg1", "#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
@@ -691,7 +691,7 @@ TriHadronAnalyzer::endJob()
                     double zvtx_f = (zvtxVect)[nass_f];
                     int iBin_f = corrFactors_->FindBin(eta_ass1, zvtx_f);
                     double eff_f = corrFactors_->GetBinContent(iBin_f);
-                    eff_f = 1.0;
+                //    eff_f = 1.0;
                     
                     for(int nass_s=0; nass_s<nMult_ass2; ++nass_s)
                     {
@@ -704,7 +704,7 @@ TriHadronAnalyzer::endJob()
                         double zvtx_s = (zvtxVect)[nass_s];
                         int iBin_s = corrFactors_->FindBin(eta_ass2, zvtx_s);
                         double eff_s = corrFactors_->GetBinContent(iBin_s);
-                        eff_s = 1.0;
+                   //     eff_s = 1.0;
                         
                        // double deltaEta = eta_ass - eta_trg;
                         double deltaPhi1 = phi_ass1 - phi_trg;
