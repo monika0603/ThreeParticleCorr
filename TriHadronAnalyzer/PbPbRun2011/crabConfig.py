@@ -3,7 +3,7 @@ config = config()
 
 config.section_('General')
 config.General.requestName = 'Three-particleCorrFirstAttempt'
-config.General.workArea = 'PbPbRun2011'
+config.General.workArea = 'PbPb'
 config.General.transferOutputs = True
 config.General.transferLogs = True
 
