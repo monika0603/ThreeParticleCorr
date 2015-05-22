@@ -45,12 +45,12 @@ process.TriHadronAnalysis = cms.EDAnalyzer('TriHadronAnalyzer',
                                           etaMinAsso2 = cms.double(-2.4),
                                           etaMaxAsso2 = cms.double(2.4),
                                           ptMinTrg = cms.double(3.0),
-                                          ptMaxTrg = cms.double(4.0),
-                                          ptMinAsso1 = cms.double(1.0),
-                                          ptMaxAsso1 = cms.double(2.0),
-                                          ptMinAsso2 = cms.double(1.0),
-                                          ptMaxAsso2 = cms.double(2.0),
-                                          bkgFactor = cms.untracked.int32(20)
+                                          ptMaxTrg = cms.double(10.0),
+                                          ptMinAsso1 = cms.double(2.0),
+                                          ptMaxAsso1 = cms.double(3.0),
+                                          ptMinAsso2 = cms.double(2.0),
+                                          ptMaxAsso2 = cms.double(3.0),
+                                          bkgFactor = cms.untracked.int32(10)
                                           )
 
 process.TFileService = cms.Service("TFileService",
@@ -77,6 +77,11 @@ process.hltSingleTrigger = process.hltHighLevel.clone()
 process.hltSingleTrigger.HLTPaths = ["HLT_HIMinBiasHfOrBSC_v*"]
 process.hltSingleTrigger.andOr = cms.bool(True)
 process.hltSingleTrigger.throw = cms.bool(False)
+
+process.TriHadronAnalysisMult0_2 = process.TriHadronAnalysis.clone(
+                                                                cutMultMin = cms.double(0),
+                                                                cutMultMax = cms.double(1)
+                                                                )
 
 process.TriHadronAnalysisMult0_10 = process.TriHadronAnalysis.clone(
                                                                  cutMultMin = cms.double(0),
@@ -113,10 +118,10 @@ process.TriHadronAnalysisMult60_70 = process.TriHadronAnalysis.clone(
                                                                  cutMultMax = cms.double(28)
                                                                  )
 
-process.TriHadronAnalysisMult70_80 = process.TriHadronAnalysis.clone(
-                                                                 cutMultMin = cms.double(28),
-                                                                 cutMultMax = cms.double(32)
-                                                                 )
+#process.TriHadronAnalysisMult70_80 = process.TriHadronAnalysis.clone(
+#cutMultMin = cms.double(28),
+#                                                                cutMultMax = cms.double(32)
+#                                                                )
 
 process.TriHadronAnalysisMultMinBias = process.TriHadronAnalysis.clone(
                                                                  cutMultMin = cms.double(0),
@@ -159,9 +164,9 @@ process.Mult6070 = cms.Path(process.hltSingleTrigger *
                             process.TriHadronAnalysisMult60_70
                             )
 
-process.Mult7080 = cms.Path(process.hltSingleTrigger *
+process.Mult002 = cms.Path(process.hltSingleTrigger *
                             process.collisionEventSelection *
-                            process.TriHadronAnalysisMult70_80
+                            process.TriHadronAnalysisMult0_2
                             )
 
 process.MultMinBias = cms.Path(process.hltSingleTrigger *
@@ -170,7 +175,7 @@ process.MultMinBias = cms.Path(process.hltSingleTrigger *
                             )
 
 process.schedule = cms.Schedule(process.Mult010,process.Mult1020,process.Mult2030,process.Mult3040,
-                                process.Mult4050,process.Mult5060,process.Mult6070,process.Mult7080,
+                                process.Mult4050,process.Mult5060,process.Mult6070,process.Mult002,
                                 process.MultMinBias)
 
 process.source = cms.Source("PoolSource",
