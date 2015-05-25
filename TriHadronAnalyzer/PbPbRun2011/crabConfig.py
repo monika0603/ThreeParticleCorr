@@ -14,7 +14,7 @@ config.JobType.outputFiles = ['TriHadronFirstAttempt.root']
 config.JobType.inputFiles = ['CorrectionFactors_PbPb.root']
 
 config.section_('Data')
-config.Data.inputDataset = '/HIMinBiasUPC/HIRun2011-PromptReco-v1/RECO'
+config.Data.inputDataset = '/HIMinBiasUPC/HIRun2011-14Mar2014-v2/RECO'
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'LumiBased'
 config.Data.unitsPerJob = 10
