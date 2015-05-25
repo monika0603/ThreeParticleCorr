@@ -718,9 +718,9 @@ TriHadronAnalyzer::endJob()
                         if(deltaPhi2 > -pi_ && deltaPhi2 < -pi_/2.0) deltaPhi2 = deltaPhi2 + 2*pi_;
                         
                         if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
-                       // cout<<eff_f<<'\t'<<eff_s<<'\t'<<1.0/nMult_trg1/eff_f/eff_s<<endl;
                         
                         if(ass_fEta_ == 0 && ass_sEta_==0) {
+                            cout<<eff_f<<'\t'<<eff_s<<'\t'<<1.0/nMult_trg1/eff_f/eff_s<<endl;
                             hBackground_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
                         
                         if(ass_fEta_ == 1 && ass_sEta_==1) {
