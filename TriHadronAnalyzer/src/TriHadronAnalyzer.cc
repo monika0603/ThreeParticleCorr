@@ -381,7 +381,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                     
             if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
             
-            double sigma = (deltaPhi1 + deltaPhi2)/2.0 - pi_;
+            double sigma = (deltaPhi1 + deltaPhi2)/2.0 - 2*pi_;
             double delta = (deltaPhi1 - deltaPhi2)/2.0;
                 
             if(ass_fEta_ == 0 && ass_sEta_== 0) {
@@ -489,6 +489,7 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
 {
     
     TH1D::SetDefaultSumw2();
+    TH2D::SetDefaultSumw2();
     events_ = fs->make<TH1F>("events","",1,0,1);
     vertices_ = fs->make<TH1F>("vertices","",1,0,1);
     
