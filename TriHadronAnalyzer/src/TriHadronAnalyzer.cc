@@ -27,7 +27,6 @@
 #include "DataFormats/Common/interface/Handle.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 //HI stuff
-//#include "DataFormats/HeavyIonEvent/interface/Centrality.h"
 #include "RecoHI/HiCentralityAlgos/interface/CentralityProvider.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
@@ -288,7 +287,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     CentralityProvider * centProvider = 0;
     if (!centProvider) centProvider = new CentralityProvider(iSetup);
     centProvider->newEvent(iEvent,iSetup);
-    //const reco::Centrality* centrality = centProvider->raw();
     double hiBin = centProvider->getBin();
 
     if( !(hiBin >= cutMultMin_ && hiBin < cutMultMax_)) return;
@@ -379,7 +377,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                     
             if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
             
-            double sigma = (deltaPhi1 + deltaPhi2)/2.0 - 2*pi_;
+            double sigma = (deltaPhi1 + deltaPhi2)/2.0 - pi_/2;
             double delta = (deltaPhi1 - deltaPhi2)/2.0;
                 
             if(ass_fEta_ == 0 && ass_sEta_== 0) {
@@ -462,7 +460,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 
                 if(ass_fEta_ == 0 && ass_sEta_==1) {
                     hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
-                 //   hSignal_["SD_af0_as1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+                    hSignal_["SD_af0_as1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
                 }
                 
              /*   if(ass_fEta_ == 1 && ass_sEta_==0) {
@@ -562,6 +560,8 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
     hBackground_["af0_as1"] = fs->make<TH2D>("hBackground_af0_as1", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hBackground_["af1_as0"] = fs->make<TH2D>("hBackground_af1_as0", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
 
+    hBackground_["SD0"] = fs->make<TH2D>("hBackground_SD0", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hBackground_["SD0_af0_as1"] = fs->make<TH2D>("hBackground_SD0_af0_as1", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     
     trkPerf_["ptAsso1"] = fs->make<TH1F>("trkPtAsso1", "Associated (1) Track p_{T} Distribution;p_{T} [GeV/c]",100,0,10);
     trkPerf_["etaAsso1"] = fs->make<TH1F>("trkEtaAsso1", "Associated (1) Track pseudorapidity Distribution;#eta",51,-2.5,2.5);
@@ -688,7 +688,6 @@ TriHadronAnalyzer::endJob()
                     double zvtx_f = (zvtxVect)[nass_f];
                     int iBin_f = corrFactors_->FindBin(eta_ass1, zvtx_f);
                     double eff_f = corrFactors_->GetBinContent(iBin_f);
-                //    eff_f = 1.0;
                     
                     for(int nass_s=0; nass_s<nMult_ass2; ++nass_s)
                     {
@@ -701,7 +700,6 @@ TriHadronAnalyzer::endJob()
                         double zvtx_s = (zvtxVect)[nass_s];
                         int iBin_s = corrFactors_->FindBin(eta_ass2, zvtx_s);
                         double eff_s = corrFactors_->GetBinContent(iBin_s);
-                   //     eff_s = 1.0;
                         
                         double deltaPhi1 = phi_ass1 - phi_trg;
                         if(deltaPhi1 > pi_) deltaPhi1 = deltaPhi1 - 2*pi_;
@@ -715,21 +713,28 @@ TriHadronAnalyzer::endJob()
                         
                         if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
                         
+                        double sigma = (deltaPhi1 + deltaPhi2)/2.0 - pi_/2;
+                        double delta = (deltaPhi1 - deltaPhi2)/2.0;
+                        
                         if(ass_fEta_ == 0 && ass_sEta_==0) {
                             if(eff_f==0 || eff_s==0 ) continue;
-                            hBackground_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
+                            hBackground_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s);
+                            hBackground_["SD0"]->Fill(sigma,delta,1.0/nMult_trg1/eff_f/eff_s);
+                        }
                         
-                        if(ass_fEta_ == 1 && ass_sEta_==1) {
+                     /*   if(ass_fEta_ == 1 && ass_sEta_==1) {
                             if(eff_f==0 || eff_s==0 ) continue;
-                            hBackground_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
+                            hBackground_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }*/
                         
                         if(ass_fEta_ == 0 && ass_sEta_==1) {
                             if(eff_f==0 || eff_s==0 ) continue;
-                            hBackground_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
+                            hBackground_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s);
+                            hBackground_["SD0_af0_as1"]->Fill(sigma,delta,1.0/nMult_trg1/eff_f/eff_s);
+                        }
                         
-                        if(ass_fEta_ == 1 && ass_sEta_==0) {
+                     /*   if(ass_fEta_ == 1 && ass_sEta_==0) {
                             if(eff_f==0 || eff_s==0 ) continue;
-                            hBackground_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
+                            hBackground_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }*/
                     
                     }
                 }
