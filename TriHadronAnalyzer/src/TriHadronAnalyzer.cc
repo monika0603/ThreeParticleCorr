@@ -349,7 +349,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 
         int iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
         double eff_f = corrFactors_->GetBinContent(iBin_f);
-      //  eff_f = 1.0;
             
         for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
         {
@@ -361,7 +360,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                     
             int iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
             double eff_s = corrFactors_->GetBinContent(iBin_s);
-          //  eff_s = 1.0;
             
             double deltaPhi_2p = phi_ass_s - phi_ass_f;
             double deltaPhi1 = phi_ass_f - phi_RndmTrg;
@@ -424,7 +422,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             
             int iBin_f = corrFactors_->FindBin(eta_ass_f, vsorted[0].z());
             double eff_f = corrFactors_->GetBinContent(iBin_f);
-         //   eff_f = 1.0;
             
             for(int nass_s=0; nass_s<nMultAsso2; nass_s++)
             {
@@ -436,7 +433,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 
                 int iBin_s = corrFactors_->FindBin(eta_ass_s, vsorted[0].z());
                 double eff_s = corrFactors_->GetBinContent(iBin_s);
-             //   eff_s = 1.0;
                 
                 double deltaPhi1 = phi_ass_f - phi_trg;
                 double deltaPhi2 = phi_ass_s - phi_trg;
@@ -451,7 +447,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             
                 if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
                 
-                double sigma = (deltaPhi1 + deltaPhi2)/2.0 - pi_;
+                double sigma = (deltaPhi1 + deltaPhi2)/2.0 - pi_/2;
                 double delta = (deltaPhi1 - deltaPhi2)/2.0;
             
                 if(ass_fEta_ == 0 && ass_sEta_==0) {
