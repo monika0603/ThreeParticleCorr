@@ -560,8 +560,8 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
     hBackground_["af0_as1"] = fs->make<TH2D>("hBackground_af0_as1", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
     hBackground_["af1_as0"] = fs->make<TH2D>("hBackground_af1_as0", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
 
-    hBackground_["SD0"] = fs->make<TH2D>("hBackground_SD0", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
-    hBackground_["SD0_af0_as1"] = fs->make<TH2D>("hBackground_SD0_af0_as1", ";#Delta#phi;#Delta#phi", 96,-pi_/2+pi_/32,3*pi_/2-pi_/32,96,-pi_/2+pi_/32,3*pi_/2-pi_/32);
+    hBackground_["SD0"] = fs->make<TH2D>("hBackground_SD0", ";#Delta#phi;#Delta#phi", 96,-pi_,pi_,96,-pi_,pi_);
+    hBackground_["SD0_af0_as1"] = fs->make<TH2D>("hBackground_SD0_af0_as1", ";#Delta#phi;#Delta#phi", 96,-pi_,pi_,96,-pi_,pi_);
     
     trkPerf_["ptAsso1"] = fs->make<TH1F>("trkPtAsso1", "Associated (1) Track p_{T} Distribution;p_{T} [GeV/c]",100,0,10);
     trkPerf_["etaAsso1"] = fs->make<TH1F>("trkEtaAsso1", "Associated (1) Track pseudorapidity Distribution;#eta",51,-2.5,2.5);
