@@ -706,7 +706,6 @@ TriHadronAnalyzer::endJob()
                         double eff_s = corrFactors_->GetBinContent(iBin_s);
                    //     eff_s = 1.0;
                         
-                       // double deltaEta = eta_ass - eta_trg;
                         double deltaPhi1 = phi_ass1 - phi_trg;
                         if(deltaPhi1 > pi_) deltaPhi1 = deltaPhi1 - 2*pi_;
                         if(deltaPhi1 < -pi_) deltaPhi1 = deltaPhi1 + 2*pi_;
