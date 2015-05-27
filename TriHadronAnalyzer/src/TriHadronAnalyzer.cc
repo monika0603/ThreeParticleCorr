@@ -720,16 +720,19 @@ TriHadronAnalyzer::endJob()
                         if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
                         
                         if(ass_fEta_ == 0 && ass_sEta_==0) {
-                            if(eff_f==0 || eff_s==0 ) cout<<eff_f<<'\t'<<eff_s<<'\t'<<1.0/nMult_trg1/eff_f/eff_s<<endl;
+                            if(eff_f==0 || eff_s==0 ) continue;
                             hBackground_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
                         
                         if(ass_fEta_ == 1 && ass_sEta_==1) {
+                            if(eff_f==0 || eff_s==0 ) continue;
                             hBackground_["1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
                         
                         if(ass_fEta_ == 0 && ass_sEta_==1) {
+                            if(eff_f==0 || eff_s==0 ) continue;
                             hBackground_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
                         
                         if(ass_fEta_ == 1 && ass_sEta_==0) {
+                            if(eff_f==0 || eff_s==0 ) continue;
                             hBackground_["af1_as0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s); }
                     
                     }
