@@ -198,7 +198,6 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     if( fabs(vsorted[0].z()) > vertexZMax_ ) return;
     
     nevt_++;
-    events_->Fill(0.5);
     evtPerf_["Nvtx"]->Fill(vsorted.size());
     evtPerf_["Ntrk"]->Fill(tracks->size());
     
@@ -337,7 +336,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     int nMultAsso2 = (int)pVect_ass2.size();
     
     double phi_RndmTrg = gRandom->Uniform(-pi_, pi_);
-            
+    events_->Fill(0.5);
     for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
     {
         TVector3 pvector_ass1 = (pVect_ass1)[nass_f];
@@ -379,7 +378,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                     
             if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
             
-            double sigma = (deltaPhi1 + deltaPhi2)/2.0 - pi_/2;
+            double sigma = (deltaPhi1 + deltaPhi2)/2.0;
             double delta = (deltaPhi1 - deltaPhi2)/2.0;
                 
             if(ass_fEta_ == 0 && ass_sEta_== 0) {
@@ -449,7 +448,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             
                 if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
                 
-                double sigma = (deltaPhi1 + deltaPhi2)/2.0 - pi_/2;
+                double sigma = (deltaPhi1 + deltaPhi2)/2.0;
                 double delta = (deltaPhi1 - deltaPhi2)/2.0;
             
                 if(ass_fEta_ == 0 && ass_sEta_==0) {
