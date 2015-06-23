@@ -335,7 +335,8 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     int nMultAsso1 = (int)pVect_ass1.size();
     int nMultAsso2 = (int)pVect_ass2.size();
     
-    events_->Fill(0.5);
+    if (nMultTrg > 0) events_->Fill(0.5);
+    
     double phi_RndmTrg = gRandom->Uniform(-pi_, pi_);
     for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
     {
