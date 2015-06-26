@@ -74,7 +74,7 @@ private:
     std::map<std::string,TH2D*> hBackground_;
     
     
-    TH1F* events_;
+    TH1F* nMultTrig_;
     TH1F* vertices_;
     TH2F* corrFactors_;
     
@@ -335,7 +335,7 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     int nMultAsso1 = (int)pVect_ass1.size();
     int nMultAsso2 = (int)pVect_ass2.size();
     
-    if (nMultTrg > 0) events_->Fill(0.5);
+    nMultTrig_->Fill(0.5, nMultTrg);
     
     double phi_RndmTrg = gRandom->Uniform(-pi_, pi_);
     for(int nass_f=0; nass_f<nMultAsso1; nass_f++)
@@ -474,8 +474,10 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 if(deltaPhi1 == 0 && deltaPhi2 == 0) exit(EXIT_FAILURE);
                 
                 if(ass_fEta_ == 0 && ass_sEta_==0) {
-                    hSignal_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
-                    hSignal_["SD0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+             //       hSignal_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+             //       hSignal_["SD0"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+                    hSignal_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/eff_f/eff_s);
+                    hSignal_["SD0"]->Fill(sigma,delta,1.0/eff_f/eff_s);
                 }
                 
               /*  if(ass_fEta_ == 1 && ass_sEta_==1) {
@@ -484,8 +486,10 @@ TriHadronAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
                 }*/
                 
                 if(ass_fEta_ == 0 && ass_sEta_==1) {
-                    hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
-                    hSignal_["SD_af0_as1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+                //    hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMultTrg/eff_f/eff_s);
+                //    hSignal_["SD_af0_as1"]->Fill(sigma,delta,1.0/nMultTrg/eff_f/eff_s);
+                    hSignal_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/eff_f/eff_s);
+                    hSignal_["SD_af0_as1"]->Fill(sigma,delta,1.0/eff_f/eff_s);
                 }
                 
              /*   if(ass_fEta_ == 1 && ass_sEta_==0) {
@@ -509,7 +513,7 @@ TriHadronAnalyzer::initHistos(const edm::Service<TFileService> & fs)
     
     TH1D::SetDefaultSumw2();
     TH2D::SetDefaultSumw2();
-    events_ = fs->make<TH1F>("events","",1,0,1);
+    nMultTrig_ = fs->make<TH1F>("nMultTrig","Trigger multiplicity",1,0,1);
     vertices_ = fs->make<TH1F>("vertices","",1,0,1);
     
     evtPerf_["Ntrk"] = fs->make<TH1F>("evtNtrk","Tracks per event",100,0,400);
@@ -765,8 +769,10 @@ TriHadronAnalyzer::endJob()
                         
                         if(ass_fEta_ == 0 && ass_sEta_==0) {
                             if(eff_f==0 || eff_s==0 ) continue;
-                            hBackground_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s);
-                            hBackground_["SD0"]->Fill(sigma,delta,1.0/nMult_trg1/eff_f/eff_s);
+                        //    hBackground_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s);
+                        //    hBackground_["SD0"]->Fill(sigma,delta,1.0/nMult_trg1/eff_f/eff_s);
+                            hBackground_["0"]->Fill(deltaPhi1,deltaPhi2,1.0/eff_f/eff_s);
+                            hBackground_["SD0"]->Fill(sigma,delta,1.0/eff_f/eff_s);
                         }
                         
                      /*   if(ass_fEta_ == 1 && ass_sEta_==1) {
@@ -775,8 +781,10 @@ TriHadronAnalyzer::endJob()
                         
                         if(ass_fEta_ == 0 && ass_sEta_==1) {
                             if(eff_f==0 || eff_s==0 ) continue;
-                            hBackground_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s);
-                            hBackground_["SD0_af0_as1"]->Fill(sigma,delta,1.0/nMult_trg1/eff_f/eff_s);
+                       //     hBackground_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/nMult_trg1/eff_f/eff_s);
+                       //     hBackground_["SD0_af0_as1"]->Fill(sigma,delta,1.0/nMult_trg1/eff_f/eff_s);
+                            hBackground_["af0_as1"]->Fill(deltaPhi1,deltaPhi2,1.0/eff_f/eff_s);
+                            hBackground_["SD0_af0_as1"]->Fill(sigma,delta,1.0/eff_f/eff_s);
                         }
                         
                      /*   if(ass_fEta_ == 1 && ass_sEta_==0) {
