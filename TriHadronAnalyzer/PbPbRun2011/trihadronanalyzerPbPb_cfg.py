@@ -13,6 +13,8 @@ process.load('CondCore.DBCommon.CondDBCommon_cfi');
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.EventContent.EventContentHeavyIons_cff')
+process.load('RecoHI.HiCentralityAlgos.HiCentrality_cfi')
+process.load("HLTrigger.HLTfilters.hltHighLevel_cfi")
 
 process.options = cms.untracked.PSet(
                                      makeTriggerResults = cms.untracked.bool(True),
@@ -67,12 +69,6 @@ process.HeavyIonGlobalParameters = cms.PSet(
                                             centralitySrc = cms.InputTag("hiCentrality")
                                             )
 
-#process.option = cms.PSet(SkipEvent = cms.untracked.vstring('ProductNotFound'))
-
-process.load('RecoHI.HiCentralityAlgos.HiCentrality_cfi')
-process.load('HeavyIonsAnalysis.Configuration.collisionEventSelection_cff')
-process.load('RecoHI.HiCentralityAlgos.HiCentrality_cfi')
-process.load("HLTrigger.HLTfilters.hltHighLevel_cfi")
 process.hltSingleTrigger = process.hltHighLevel.clone()
 process.hltSingleTrigger.HLTPaths = ["HLT_HIMinBiasHfOrBSC_v*"]
 process.hltSingleTrigger.andOr = cms.bool(True)
